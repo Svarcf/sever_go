@@ -1,12 +1,11 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"time"
 )
 
 type ToolRepairRecord struct {
-	gorm.Model
+	Id                     uint `gorm:"primarykey"`
 	DateStarted            time.Time
 	DateEnded              time.Time
 	RepairDescription      string

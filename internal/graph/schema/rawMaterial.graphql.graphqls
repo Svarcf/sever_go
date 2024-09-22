@@ -1,0 +1,33 @@
+extend type Query {
+    rawMaterials: [RawMaterial]
+    rawMaterial(id: ID!): RawMaterial
+}
+
+extend type Mutation {
+    createRawMaterial(
+        createRawMaterialInput: CreateRawMaterialInput
+    ): RawMaterial
+    updateRawMaterial(
+        updateRawMaterialInput: UpdateRawMaterialInput
+    ): RawMaterial
+}
+
+type RawMaterial {
+    id: ID!
+    code: String!
+    name: String!
+    number: Int
+}
+
+input CreateRawMaterialInput {
+    code: String!
+    name: String!
+    number: Int!
+}
+
+input UpdateRawMaterialInput {
+    id: Int!
+    code: String!
+    name: String!
+    number: Int!
+}

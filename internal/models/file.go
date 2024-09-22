@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type File struct {
-	gorm.Model
+	Id       uint `gorm:"primarykey"`
 	Name     string
 	Location string
 }

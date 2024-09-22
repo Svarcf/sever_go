@@ -1,11 +1,9 @@
 package models
 
-import "gorm.io/gorm"
-
 type RawMaterial struct {
-	gorm.Model
+	Id     uint   `gorm:"primarykey"`
 	Name   string `gorm:"unique"`
 	Code   string `gorm:"unique"`
-	Number uint
+	Number int
 	Tools  []*Tool `gorm:"many2many:tools_rawmaterials;"`
 }

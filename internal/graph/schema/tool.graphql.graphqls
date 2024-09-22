@@ -1,0 +1,34 @@
+extend type Query {
+    tools: [Tool]
+    tool(code: String!): Tool
+}
+
+extend type Mutation {
+    createTool(createToolInput: CreateToolInput): Tool
+}
+
+type Tool {
+    id: ID!
+    code: String!
+    name: String!
+    creationDate: String
+    dimensions: String
+    note: String
+    toolStroke: String
+    workpieceDescription: String
+    toolType: ToolType
+    rawMaterials: [RawMaterial]
+    standardParts: [StandardPart]
+    mechanicalPresses: [MechanicalPress]
+    toolRepairRecords: [ToolRepairRecord]
+}
+
+input CreateToolInput {
+    code: String!
+    name: String!
+    creationDate: String
+    dimensions: String
+    note: String
+    toolStroke: String
+    workpieceDescription: String
+}

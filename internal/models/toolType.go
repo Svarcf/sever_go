@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type ToolType struct {
-	gorm.Model
+	Id    uint   `gorm:"primarykey"`
 	Name  string `gorm:"unique"`
 	Code  string `gorm:"unique"`
 	Tools []Tool

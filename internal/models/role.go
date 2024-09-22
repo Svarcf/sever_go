@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type Role struct {
-	gorm.Model
-	Name  string `gorm:"unique"`
-	Users []User
+	Id uint `gorm:"primarykey"`
+
+	Name string `gorm:"unique"`
 }

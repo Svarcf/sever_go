@@ -1,13 +1,11 @@
 package models
 
-import "gorm.io/gorm"
-
 type User struct {
-	gorm.Model
-	userName  string `gorm:"unique"`
+	Id        uint   `gorm:"primarykey"`
+	Username  string `gorm:"unique"`
 	FirstName string
 	LastName  string
 	Password  string
 	RoleID    uint
-	Role      Role
+	Role      Role `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

@@ -1,0 +1,39 @@
+scalar Date
+
+extend type Query {
+    toolRepairRecords: [ToolRepairRecord]
+    toolRepairRecord(id: ID!): ToolRepairRecord
+}
+
+extend type Mutation {
+    createToolRepairRecord(
+        createToolRepairRecordInput: CreateToolRepairRecordInput
+    ): ToolRepairRecord
+}
+
+type ToolRepairRecord {
+    id: ID!
+    dateStarted: Date
+    dateEnded: Date
+    repairDescription: String
+    malfunctionDescription: String
+    deadlineDate: Date
+    material: String
+    timeSpent: String
+    externalServices: String
+    note: String
+    tool: Tool
+    user: User
+}
+
+input CreateToolRepairRecordInput {
+    dateStarted: Date
+    dateEnded: Date
+    repairDescription: String
+    malfunctionDescription: String
+    deadlineDate: Date
+    material: String
+    timeSpent: String
+    externalServices: String
+    note: String
+}

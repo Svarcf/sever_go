@@ -1,0 +1,31 @@
+extend type Query {
+    mechanicalPresses: [MechanicalPress]
+    mechanicalPress(id: ID!): MechanicalPress
+}
+
+extend type Mutation {
+    createMechanicalPress(
+        createMechanicalPressInput: CreateMechanicalPressInput
+    ): MechanicalPress
+    updateMechanicalPress(
+        updateMechanicalPressInput: UpdateMechanicalPressInput
+    ): MechanicalPress
+}
+
+type MechanicalPress {
+    id: ID!
+    name: String!
+    code: String!
+    tools: [Tool]
+}
+
+input CreateMechanicalPressInput {
+    code: String!
+    name: String!
+}
+
+input UpdateMechanicalPressInput {
+    id: Int!
+    code: String!
+    name: String!
+}

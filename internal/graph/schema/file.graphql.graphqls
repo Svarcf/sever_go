@@ -1,0 +1,20 @@
+extend type Query {
+    files: [File]
+    file(id: ID!): File
+}
+
+extend type Mutation {
+    createFile(createFileInput: CreateFileInput): File
+}
+
+type File {
+    id: ID!
+    name: String!
+    location: String!
+}
+
+input CreateFileInput {
+    code: String!
+    name: String!
+    location: String!
+}

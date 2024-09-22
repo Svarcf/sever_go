@@ -16,7 +16,7 @@ type Config struct {
 	APP_NAME string
 }
 
-func LoadConfig() (*Config, error) {
+func LoadConfig() *Config {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
 
@@ -39,5 +39,5 @@ func LoadConfig() (*Config, error) {
 		APP_NAME: viper.GetString("app.name"),
 	}
 
-	return config, nil
+	return config
 }

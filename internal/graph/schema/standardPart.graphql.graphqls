@@ -1,0 +1,34 @@
+extend type Query {
+    standardParts: [StandardPart]
+    standardPart(id: ID!): StandardPart
+}
+
+extend type Mutation {
+    createStandardPart(
+        createStandardPartInput: CreateStandardPartInput
+    ): StandardPart
+
+    updateStandardPart(
+        updateStandardPartInput: UpdateStandardPartInput
+    ): StandardPart
+}
+
+type StandardPart {
+    id: ID!
+    code: String!
+    name: String!
+    number: Int
+}
+
+input UpdateStandardPartInput {
+    id: Int!
+    code: String!
+    name: String!
+    number: Int!
+}
+
+input CreateStandardPartInput {
+    code: String!
+    name: String!
+    number: Int!
+}

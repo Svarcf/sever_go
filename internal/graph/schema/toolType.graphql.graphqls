@@ -1,0 +1,27 @@
+extend type Query {
+    toolTypes: [ToolType]
+    toolType(code: String!): ToolType
+}
+
+extend type Mutation {
+    createToolType(createToolTypeInput: CreateToolTypeInput): ToolType
+    updateToolType(updateToolTypeInput: UpdateToolTypeInput): ToolType
+}
+
+type ToolType {
+    id: ID!
+    code: String!
+    name: String!
+    tools: [Tool]
+}
+
+input CreateToolTypeInput {
+    code: String!
+    name: String!
+}
+
+input UpdateToolTypeInput {
+    id: Int!
+    code: String!
+    name: String!
+}

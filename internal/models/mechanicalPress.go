@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type MechanicalPress struct {
-	gorm.Model
+	Id     uint `gorm:"primarykey"`
 	Name   string
 	Code   string `gorm:"unique"`
 	Number uint

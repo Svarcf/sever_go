@@ -1,4 +1,4 @@
-package database
+package common
 
 import (
 	"fmt"
@@ -11,11 +11,10 @@ import (
 var DB *gorm.DB
 
 func InitDB() *gorm.DB {
-	cfg, err := config.LoadConfig()
+	cfg := config.LoadConfig()
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		cfg.DB_USER, cfg.DB_PASS, cfg.DB_HOST, cfg.DB_PORT, cfg.DB_NAME)
 
-	println(dsn)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
@@ -26,6 +25,5 @@ func InitDB() *gorm.DB {
 			&models.File{}, &models.StandardPart{}, &models.MechanicalPress{},
 			&models.ToolRepairRecord{}, &models.RawMaterial{})
 	}
-
 	return db
 }
