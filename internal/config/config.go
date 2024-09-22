@@ -13,6 +13,7 @@ type Config struct {
 	DB_NAME  string
 	APP_PORT string
 	APP_NAME string
+	INIT_DB  bool
 }
 
 func LoadConfig() (*Config, error) {
@@ -21,6 +22,7 @@ func LoadConfig() (*Config, error) {
 
 	viper.SetDefault("APP_PORT", "8080")
 	viper.SetDefault("APP_NAME", "sever-go")
+	viper.SetDefault("INIT_DB", false)
 
 	if err := viper.ReadInConfig(); err != nil {
 		log.Printf("Error reading config file, %s", err)
