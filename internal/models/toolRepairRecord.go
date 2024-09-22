@@ -19,5 +19,5 @@ type ToolRepairRecord struct {
 	ToolID                 uint
 	Tool                   Tool
 	UserID                 uint
-	RepairedBy             User
+	RepairedBy             User `gorm:"foreignKey:UserID"`
 }

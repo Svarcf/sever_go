@@ -1,0 +1,15 @@
+db:
+  host: localhost
+  user: user
+  pass: pass
+  name: db
+  dialect: mysql
+  port: 3306
+  init: false
+
+app:
+  host: localhost
+  port: 8000
+
+secret: adasxovnklnqklnkjdsankdnw
+auth_time: 1h

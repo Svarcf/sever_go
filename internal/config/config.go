@@ -1,8 +1,8 @@
 package config
 
 import (
+	"fmt"
 	"github.com/spf13/viper"
-	"log"
 )
 
 type Config struct {
@@ -11,30 +11,32 @@ type Config struct {
 	DB_PASS  string
 	DB_USER  string
 	DB_NAME  string
+	DB_INIT  bool
 	APP_PORT string
 	APP_NAME string
-	INIT_DB  bool
 }
 
 func LoadConfig() (*Config, error) {
 	viper.SetConfigName("config")
-	viper.AutomaticEnv()
+	viper.AddConfigPath(".")
 
-	viper.SetDefault("APP_PORT", "8080")
-	viper.SetDefault("APP_NAME", "sever-go")
-	viper.SetDefault("INIT_DB", false)
+	viper.SetDefault("app.port", "8080")
+	viper.SetDefault("app.name", "sever-go")
+	viper.SetDefault("db.init", false)
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Printf("Error reading config file, %s", err)
+		panic(fmt.Sprintf("Error reading config file, %s", err))
 	}
+
 	config := &Config{
-		DB_HOST:  viper.GetString("DB_HOST"),
-		DB_PORT:  viper.GetString("DB_PORT"),
-		DB_PASS:  viper.GetString("DB_PASS"),
-		DB_USER:  viper.GetString("DB_USER"),
-		DB_NAME:  viper.GetString("DB_NAME"),
-		APP_PORT: viper.GetString("APP_PORT"),
-		APP_NAME: viper.GetString("APP_NAME"),
+		DB_HOST:  viper.GetString("db.host"),
+		DB_PORT:  viper.GetString("db.port"),
+		DB_PASS:  viper.GetString("db.pass"),
+		DB_USER:  viper.GetString("db.user"),
+		DB_NAME:  viper.GetString("db.name"),
+		DB_INIT:  viper.GetBool("db.init"),
+		APP_PORT: viper.GetString("app.port"),
+		APP_NAME: viper.GetString("app.name"),
 	}
 
 	return config, nil
