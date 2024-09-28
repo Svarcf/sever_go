@@ -24,10 +24,10 @@ func (r *mutationResolver) UpdateToolType(ctx context.Context, updateToolTypeInp
 
 // ToolTypes is the resolver for the toolTypes field.
 func (r *queryResolver) ToolTypes(ctx context.Context) ([]*models.ToolType, error) {
-	panic(fmt.Errorf("not implemented: ToolTypes - toolTypes"))
+	return r.ToolTypeService.GetToolTypes()
 }
 
 // ToolType is the resolver for the toolType field.
 func (r *queryResolver) ToolType(ctx context.Context, code string) (*models.ToolType, error) {
-	panic(fmt.Errorf("not implemented: ToolType - toolType"))
+	return r.ToolTypeService.GetToolTypeByCode(code)
 }

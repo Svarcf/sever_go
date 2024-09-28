@@ -12,7 +12,7 @@ type ToolRepairRecord struct {
 	MalfunctionDescription string
 	DeadlineDate           time.Time
 	Material               string
-	TimeSpent              uint
+	TimeSpent              int
 	ExternalServices       string
 	Note                   string
 	ToolID                 uint

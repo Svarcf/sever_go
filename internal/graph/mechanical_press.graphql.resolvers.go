@@ -24,10 +24,10 @@ func (r *mutationResolver) UpdateMechanicalPress(ctx context.Context, updateMech
 
 // MechanicalPresses is the resolver for the mechanicalPresses field.
 func (r *queryResolver) MechanicalPresses(ctx context.Context) ([]*models.MechanicalPress, error) {
-	panic(fmt.Errorf("not implemented: MechanicalPresses - mechanicalPresses"))
+	return r.MechanicalPressService.GetMechanicalPresses()
 }
 
 // MechanicalPress is the resolver for the mechanicalPress field.
 func (r *queryResolver) MechanicalPress(ctx context.Context, id uint) (*models.MechanicalPress, error) {
-	panic(fmt.Errorf("not implemented: MechanicalPress - mechanicalPress"))
+	return r.MechanicalPressService.GetMechanicalPressById(id)
 }

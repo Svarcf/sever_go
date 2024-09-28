@@ -1,4 +1,4 @@
-scalar Date
+scalar Time
 
 extend type Query {
     toolRepairRecords: [ToolRepairRecord]
@@ -13,13 +13,13 @@ extend type Mutation {
 
 type ToolRepairRecord {
     id: ID!
-    dateStarted: Date
-    dateEnded: Date
+    dateStarted: Time
+    dateEnded: Time
     repairDescription: String
     malfunctionDescription: String
-    deadlineDate: Date
+    deadlineDate: Time
     material: String
-    timeSpent: String
+    timeSpent: Int 
     externalServices: String
     note: String
     tool: Tool
@@ -27,11 +27,11 @@ type ToolRepairRecord {
 }
 
 input CreateToolRepairRecordInput {
-    dateStarted: Date
-    dateEnded: Date
+    dateStarted: Time
+    dateEnded: Time
     repairDescription: String
     malfunctionDescription: String
-    deadlineDate: Date
+    deadlineDate: Time
     material: String
     timeSpent: String
     externalServices: String

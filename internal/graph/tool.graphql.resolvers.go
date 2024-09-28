@@ -19,22 +19,37 @@ func (r *mutationResolver) CreateTool(ctx context.Context, createToolInput *mode
 
 // Tools is the resolver for the tools field.
 func (r *queryResolver) Tools(ctx context.Context) ([]*models.Tool, error) {
-	panic(fmt.Errorf("not implemented: Tools - tools"))
+	return r.ToolService.GetTools()
 }
 
 // Tool is the resolver for the tool field.
 func (r *queryResolver) Tool(ctx context.Context, code string) (*models.Tool, error) {
-	panic(fmt.Errorf("not implemented: Tool - tool"))
+	return r.ToolService.GetToolByCode(code)
 }
 
-// CreationDate is the resolver for the creationDate field.
-func (r *toolResolver) CreationDate(ctx context.Context, obj *models.Tool) (*string, error) {
-	panic(fmt.Errorf("not implemented: CreationDate - creationDate"))
+// ToolType is the resolver for the toolType field.
+func (r *toolResolver) ToolType(ctx context.Context, obj *models.Tool) (*models.ToolType, error) {
+	return r.ToolTypeService.GetToolTypeById(obj.ToolTypeID)
 }
 
-// Dimensions is the resolver for the dimensions field.
-func (r *toolResolver) Dimensions(ctx context.Context, obj *models.Tool) (*string, error) {
-	panic(fmt.Errorf("not implemented: Dimensions - dimensions"))
+// RawMaterials is the resolver for the rawMaterials field.
+func (r *toolResolver) RawMaterials(ctx context.Context, obj *models.Tool) ([]*models.RawMaterial, error) {
+	return r.ToolService.GetRawMaterials(obj)
+}
+
+// StandardParts is the resolver for the standardParts field.
+func (r *toolResolver) StandardParts(ctx context.Context, obj *models.Tool) ([]*models.StandardPart, error) {
+	return r.ToolService.GetStandardParts(obj)
+}
+
+// MechanicalPresses is the resolver for the mechanicalPresses field.
+func (r *toolResolver) MechanicalPresses(ctx context.Context, obj *models.Tool) ([]*models.MechanicalPress, error) {
+	return r.ToolService.GetMechanicalPresses(obj)
+}
+
+// ToolRepairRecords is the resolver for the toolRepairRecords field.
+func (r *toolResolver) ToolRepairRecords(ctx context.Context, obj *models.Tool) ([]*models.ToolRepairRecord, error) {
+	return r.ToolService.GetToolRepairRecords(obj)
 }
 
 // Tool returns ToolResolver implementation.

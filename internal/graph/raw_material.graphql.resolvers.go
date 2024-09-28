@@ -24,10 +24,10 @@ func (r *mutationResolver) UpdateRawMaterial(ctx context.Context, updateRawMater
 
 // RawMaterials is the resolver for the rawMaterials field.
 func (r *queryResolver) RawMaterials(ctx context.Context) ([]*models.RawMaterial, error) {
-	panic(fmt.Errorf("not implemented: RawMaterials - rawMaterials"))
+	return r.RawMaterialService.GetRawMaterials()
 }
 
 // RawMaterial is the resolver for the rawMaterial field.
 func (r *queryResolver) RawMaterial(ctx context.Context, id uint) (*models.RawMaterial, error) {
-	panic(fmt.Errorf("not implemented: RawMaterial - rawMaterial"))
+	return r.RawMaterialService.GetRawMaterialById(id)
 }

@@ -9,5 +9,13 @@ import (
 )
 
 type Resolver struct {
-	UserService *services.UserService
+	UserService             *services.UserService
+	RoleService             *services.RoleService
+	FileService             *services.FileService
+	MechanicalPressService  *services.MechanicalPressService
+	StandardPartService     *services.StandardPartService
+	ToolTypeService         *services.ToolTypeService
+	ToolService             *services.ToolService
+	ToolRepairRecordService *services.ToolRepairRecordService
+	RawMaterialService      *services.RawMaterialService
 }

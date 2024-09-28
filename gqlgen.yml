@@ -102,3 +102,15 @@ models:
     fields:
       role:
         resolver: true
+  Tool:
+    fields:
+      toolType:
+        resolver: true
+      rawMaterials:
+        resolver: true
+      standardParts:
+        resolver: true
+      mechanicalPresses:
+        resolver: true
+      toolRepairRecords:
+        resolver: true

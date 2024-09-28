@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
@@ -128,8 +129,7 @@ type ComplexityRoot struct {
 
 	Tool struct {
 		Code                 func(childComplexity int) int
-		CreationDate         func(childComplexity int) int
-		Dimensions           func(childComplexity int) int
+		Dimension            func(childComplexity int) int
 		Id                   func(childComplexity int) int
 		MechanicalPresses    func(childComplexity int) int
 		Name                 func(childComplexity int) int
@@ -212,17 +212,13 @@ type SubscriptionResolver interface {
 	UserCreated(ctx context.Context) (<-chan *models.User, error)
 }
 type ToolResolver interface {
-	CreationDate(ctx context.Context, obj *models.Tool) (*string, error)
-	Dimensions(ctx context.Context, obj *models.Tool) (*string, error)
+	ToolType(ctx context.Context, obj *models.Tool) (*models.ToolType, error)
+	RawMaterials(ctx context.Context, obj *models.Tool) ([]*models.RawMaterial, error)
+	StandardParts(ctx context.Context, obj *models.Tool) ([]*models.StandardPart, error)
+	MechanicalPresses(ctx context.Context, obj *models.Tool) ([]*models.MechanicalPress, error)
+	ToolRepairRecords(ctx context.Context, obj *models.Tool) ([]*models.ToolRepairRecord, error)
 }
 type ToolRepairRecordResolver interface {
-	DateStarted(ctx context.Context, obj *models.ToolRepairRecord) (*string, error)
-	DateEnded(ctx context.Context, obj *models.ToolRepairRecord) (*string, error)
-
-	DeadlineDate(ctx context.Context, obj *models.ToolRepairRecord) (*string, error)
-
-	TimeSpent(ctx context.Context, obj *models.ToolRepairRecord) (*string, error)
-
 	User(ctx context.Context, obj *models.ToolRepairRecord) (*models.User, error)
 }
 type UserResolver interface {
@@ -708,19 +704,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Tool.Code(childComplexity), true
 
-	case "Tool.creationDate":
-		if e.complexity.Tool.CreationDate == nil {
+	case "Tool.dimension":
+		if e.complexity.Tool.Dimension == nil {
 			break
 		}
 
-		return e.complexity.Tool.CreationDate(childComplexity), true
-
-	case "Tool.dimensions":
-		if e.complexity.Tool.Dimensions == nil {
-			break
-		}
-
-		return e.complexity.Tool.Dimensions(childComplexity), true
+		return e.complexity.Tool.Dimension(childComplexity), true
 
 	case "Tool.id":
 		if e.complexity.Tool.Id == nil {
@@ -1990,10 +1979,8 @@ func (ec *executionContext) fieldContext_MechanicalPress_tools(_ context.Context
 				return ec.fieldContext_Tool_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Tool_name(ctx, field)
-			case "creationDate":
-				return ec.fieldContext_Tool_creationDate(ctx, field)
-			case "dimensions":
-				return ec.fieldContext_Tool_dimensions(ctx, field)
+			case "dimension":
+				return ec.fieldContext_Tool_dimension(ctx, field)
 			case "note":
 				return ec.fieldContext_Tool_note(ctx, field)
 			case "toolStroke":
@@ -2549,10 +2536,8 @@ func (ec *executionContext) fieldContext_Mutation_createTool(ctx context.Context
 				return ec.fieldContext_Tool_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Tool_name(ctx, field)
-			case "creationDate":
-				return ec.fieldContext_Tool_creationDate(ctx, field)
-			case "dimensions":
-				return ec.fieldContext_Tool_dimensions(ctx, field)
+			case "dimension":
+				return ec.fieldContext_Tool_dimension(ctx, field)
 			case "note":
 				return ec.fieldContext_Tool_note(ctx, field)
 			case "toolStroke":
@@ -3448,10 +3433,8 @@ func (ec *executionContext) fieldContext_Query_tools(_ context.Context, field gr
 				return ec.fieldContext_Tool_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Tool_name(ctx, field)
-			case "creationDate":
-				return ec.fieldContext_Tool_creationDate(ctx, field)
-			case "dimensions":
-				return ec.fieldContext_Tool_dimensions(ctx, field)
+			case "dimension":
+				return ec.fieldContext_Tool_dimension(ctx, field)
 			case "note":
 				return ec.fieldContext_Tool_note(ctx, field)
 			case "toolStroke":
@@ -3517,10 +3500,8 @@ func (ec *executionContext) fieldContext_Query_tool(ctx context.Context, field g
 				return ec.fieldContext_Tool_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Tool_name(ctx, field)
-			case "creationDate":
-				return ec.fieldContext_Tool_creationDate(ctx, field)
-			case "dimensions":
-				return ec.fieldContext_Tool_dimensions(ctx, field)
+			case "dimension":
+				return ec.fieldContext_Tool_dimension(ctx, field)
 			case "note":
 				return ec.fieldContext_Tool_note(ctx, field)
 			case "toolStroke":
@@ -4692,8 +4673,8 @@ func (ec *executionContext) fieldContext_Tool_name(_ context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_creationDate(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Tool_creationDate(ctx, field)
+func (ec *executionContext) _Tool_dimension(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Tool_dimension(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -4706,7 +4687,7 @@ func (ec *executionContext) _Tool_creationDate(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Tool().CreationDate(rctx, obj)
+		return obj.Dimension, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4715,58 +4696,17 @@ func (ec *executionContext) _Tool_creationDate(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Tool_creationDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Tool_dimension(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Tool",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Tool_dimensions(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Tool_dimensions(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Tool().Dimensions(rctx, obj)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Tool_dimensions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Tool",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
 		},
@@ -4911,7 +4851,7 @@ func (ec *executionContext) _Tool_toolType(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ToolType, nil
+		return ec.resolvers.Tool().ToolType(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4920,17 +4860,17 @@ func (ec *executionContext) _Tool_toolType(ctx context.Context, field graphql.Co
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(models.ToolType)
+	res := resTmp.(*models.ToolType)
 	fc.Result = res
-	return ec.marshalOToolType2githubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx, field.Selections, res)
+	return ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Tool_toolType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Tool",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -4962,7 +4902,7 @@ func (ec *executionContext) _Tool_rawMaterials(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.RawMaterials, nil
+		return ec.resolvers.Tool().RawMaterials(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4980,8 +4920,8 @@ func (ec *executionContext) fieldContext_Tool_rawMaterials(_ context.Context, fi
 	fc = &graphql.FieldContext{
 		Object:     "Tool",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -5013,7 +4953,7 @@ func (ec *executionContext) _Tool_standardParts(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.StandardParts, nil
+		return ec.resolvers.Tool().StandardParts(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5031,8 +4971,8 @@ func (ec *executionContext) fieldContext_Tool_standardParts(_ context.Context, f
 	fc = &graphql.FieldContext{
 		Object:     "Tool",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -5064,7 +5004,7 @@ func (ec *executionContext) _Tool_mechanicalPresses(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.MechanicalPresses, nil
+		return ec.resolvers.Tool().MechanicalPresses(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5082,8 +5022,8 @@ func (ec *executionContext) fieldContext_Tool_mechanicalPresses(_ context.Contex
 	fc = &graphql.FieldContext{
 		Object:     "Tool",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -5115,7 +5055,7 @@ func (ec *executionContext) _Tool_toolRepairRecords(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ToolRepairRecords, nil
+		return ec.resolvers.Tool().ToolRepairRecords(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5124,17 +5064,17 @@ func (ec *executionContext) _Tool_toolRepairRecords(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]models.ToolRepairRecord)
+	res := resTmp.([]*models.ToolRepairRecord)
 	fc.Result = res
-	return ec.marshalOToolRepairRecord2ᚕgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx, field.Selections, res)
+	return ec.marshalOToolRepairRecord2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Tool_toolRepairRecords(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Tool",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -5226,7 +5166,7 @@ func (ec *executionContext) _ToolRepairRecord_dateStarted(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.ToolRepairRecord().DateStarted(rctx, obj)
+		return obj.DateStarted, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5235,19 +5175,19 @@ func (ec *executionContext) _ToolRepairRecord_dateStarted(ctx context.Context, f
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(time.Time)
 	fc.Result = res
-	return ec.marshalODate2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ToolRepairRecord_dateStarted(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ToolRepairRecord",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Date does not have child fields")
+			return nil, errors.New("field of type Time does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5267,7 +5207,7 @@ func (ec *executionContext) _ToolRepairRecord_dateEnded(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.ToolRepairRecord().DateEnded(rctx, obj)
+		return obj.DateEnded, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5276,19 +5216,19 @@ func (ec *executionContext) _ToolRepairRecord_dateEnded(ctx context.Context, fie
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(time.Time)
 	fc.Result = res
-	return ec.marshalODate2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ToolRepairRecord_dateEnded(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ToolRepairRecord",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Date does not have child fields")
+			return nil, errors.New("field of type Time does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5390,7 +5330,7 @@ func (ec *executionContext) _ToolRepairRecord_deadlineDate(ctx context.Context, 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.ToolRepairRecord().DeadlineDate(rctx, obj)
+		return obj.DeadlineDate, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5399,19 +5339,19 @@ func (ec *executionContext) _ToolRepairRecord_deadlineDate(ctx context.Context, 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(time.Time)
 	fc.Result = res
-	return ec.marshalODate2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ToolRepairRecord_deadlineDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ToolRepairRecord",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Date does not have child fields")
+			return nil, errors.New("field of type Time does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5472,7 +5412,7 @@ func (ec *executionContext) _ToolRepairRecord_timeSpent(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.ToolRepairRecord().TimeSpent(rctx, obj)
+		return obj.TimeSpent, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5481,19 +5421,19 @@ func (ec *executionContext) _ToolRepairRecord_timeSpent(ctx context.Context, fie
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ToolRepairRecord_timeSpent(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ToolRepairRecord",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5623,10 +5563,8 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_tool(_ context.Context
 				return ec.fieldContext_Tool_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Tool_name(ctx, field)
-			case "creationDate":
-				return ec.fieldContext_Tool_creationDate(ctx, field)
-			case "dimensions":
-				return ec.fieldContext_Tool_dimensions(ctx, field)
+			case "dimension":
+				return ec.fieldContext_Tool_dimension(ctx, field)
 			case "note":
 				return ec.fieldContext_Tool_note(ctx, field)
 			case "toolStroke":
@@ -5877,10 +5815,8 @@ func (ec *executionContext) fieldContext_ToolType_tools(_ context.Context, field
 				return ec.fieldContext_Tool_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Tool_name(ctx, field)
-			case "creationDate":
-				return ec.fieldContext_Tool_creationDate(ctx, field)
-			case "dimensions":
-				return ec.fieldContext_Tool_dimensions(ctx, field)
+			case "dimension":
+				return ec.fieldContext_Tool_dimension(ctx, field)
 			case "note":
 				return ec.fieldContext_Tool_note(ctx, field)
 			case "toolStroke":
@@ -8160,14 +8096,14 @@ func (ec *executionContext) unmarshalInputCreateToolRepairRecordInput(ctx contex
 		switch k {
 		case "dateStarted":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dateStarted"))
-			data, err := ec.unmarshalODate2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.DateStarted = data
 		case "dateEnded":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dateEnded"))
-			data, err := ec.unmarshalODate2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8188,7 +8124,7 @@ func (ec *executionContext) unmarshalInputCreateToolRepairRecordInput(ctx contex
 			it.MalfunctionDescription = data
 		case "deadlineDate":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deadlineDate"))
-			data, err := ec.unmarshalODate2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9273,72 +9209,8 @@ func (ec *executionContext) _Tool(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
-		case "creationDate":
-			field := field
-
-			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Tool_creationDate(ctx, field, obj)
-				return res
-			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "dimensions":
-			field := field
-
-			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Tool_dimensions(ctx, field, obj)
-				return res
-			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "dimension":
+			out.Values[i] = ec._Tool_dimension(ctx, field, obj)
 		case "note":
 			out.Values[i] = ec._Tool_note(ctx, field, obj)
 		case "toolStroke":
@@ -9346,15 +9218,170 @@ func (ec *executionContext) _Tool(ctx context.Context, sel ast.SelectionSet, obj
 		case "workpieceDescription":
 			out.Values[i] = ec._Tool_workpieceDescription(ctx, field, obj)
 		case "toolType":
-			out.Values[i] = ec._Tool_toolType(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Tool_toolType(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "rawMaterials":
-			out.Values[i] = ec._Tool_rawMaterials(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Tool_rawMaterials(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "standardParts":
-			out.Values[i] = ec._Tool_standardParts(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Tool_standardParts(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "mechanicalPresses":
-			out.Values[i] = ec._Tool_mechanicalPresses(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Tool_mechanicalPresses(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "toolRepairRecords":
-			out.Values[i] = ec._Tool_toolRepairRecords(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Tool_toolRepairRecords(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9395,143 +9422,19 @@ func (ec *executionContext) _ToolRepairRecord(ctx context.Context, sel ast.Selec
 				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "dateStarted":
-			field := field
-
-			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._ToolRepairRecord_dateStarted(ctx, field, obj)
-				return res
-			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			out.Values[i] = ec._ToolRepairRecord_dateStarted(ctx, field, obj)
 		case "dateEnded":
-			field := field
-
-			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._ToolRepairRecord_dateEnded(ctx, field, obj)
-				return res
-			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			out.Values[i] = ec._ToolRepairRecord_dateEnded(ctx, field, obj)
 		case "repairDescription":
 			out.Values[i] = ec._ToolRepairRecord_repairDescription(ctx, field, obj)
 		case "malfunctionDescription":
 			out.Values[i] = ec._ToolRepairRecord_malfunctionDescription(ctx, field, obj)
 		case "deadlineDate":
-			field := field
-
-			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._ToolRepairRecord_deadlineDate(ctx, field, obj)
-				return res
-			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			out.Values[i] = ec._ToolRepairRecord_deadlineDate(ctx, field, obj)
 		case "material":
 			out.Values[i] = ec._ToolRepairRecord_material(ctx, field, obj)
 		case "timeSpent":
-			field := field
-
-			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._ToolRepairRecord_timeSpent(ctx, field, obj)
-				return res
-			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			out.Values[i] = ec._ToolRepairRecord_timeSpent(ctx, field, obj)
 		case "externalServices":
 			out.Values[i] = ec._ToolRepairRecord_externalServices(ctx, field, obj)
 		case "note":
@@ -10460,22 +10363,6 @@ func (ec *executionContext) unmarshalOCreateUserInput2ᚖgithubᚗcomᚋSvarcf�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalODate2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalString(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalODate2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	res := graphql.MarshalString(*v)
-	return res
-}
-
 func (ec *executionContext) marshalOFile2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFile(ctx context.Context, sel ast.SelectionSet, v []*models.File) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -10752,6 +10639,32 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
+func (ec *executionContext) unmarshalOTime2timeᚐTime(ctx context.Context, v interface{}) (time.Time, error) {
+	res, err := graphql.UnmarshalTime(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTime2timeᚐTime(ctx context.Context, sel ast.SelectionSet, v time.Time) graphql.Marshaler {
+	res := graphql.MarshalTime(v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOTime2ᚖtimeᚐTime(ctx context.Context, v interface{}) (*time.Time, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalTime(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel ast.SelectionSet, v *time.Time) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalTime(*v)
+	return res
+}
+
 func (ec *executionContext) marshalOTool2githubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx context.Context, sel ast.SelectionSet, v models.Tool) graphql.Marshaler {
 	return ec._Tool(ctx, sel, &v)
 }
@@ -10845,51 +10758,6 @@ func (ec *executionContext) marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋi
 	return ec._Tool(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOToolRepairRecord2githubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx context.Context, sel ast.SelectionSet, v models.ToolRepairRecord) graphql.Marshaler {
-	return ec._ToolRepairRecord(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalOToolRepairRecord2ᚕgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx context.Context, sel ast.SelectionSet, v []models.ToolRepairRecord) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOToolRepairRecord2githubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
 func (ec *executionContext) marshalOToolRepairRecord2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx context.Context, sel ast.SelectionSet, v []*models.ToolRepairRecord) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -10936,10 +10804,6 @@ func (ec *executionContext) marshalOToolRepairRecord2ᚖgithubᚗcomᚋSvarcfᚋ
 		return graphql.Null
 	}
 	return ec._ToolRepairRecord(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOToolType2githubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx context.Context, sel ast.SelectionSet, v models.ToolType) graphql.Marshaler {
-	return ec._ToolType(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalOToolType2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx context.Context, sel ast.SelectionSet, v []*models.ToolType) graphql.Marshaler {

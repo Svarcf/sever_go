@@ -2,6 +2,10 @@
 
 package model
 
+import (
+	"time"
+)
+
 type CreateFileInput struct {
 	Code     string `json:"code"`
 	Name     string `json:"name"`
@@ -40,15 +44,15 @@ type CreateToolInput struct {
 }
 
 type CreateToolRepairRecordInput struct {
-	DateStarted            *string `json:"dateStarted,omitempty"`
-	DateEnded              *string `json:"dateEnded,omitempty"`
-	RepairDescription      *string `json:"repairDescription,omitempty"`
-	MalfunctionDescription *string `json:"malfunctionDescription,omitempty"`
-	DeadlineDate           *string `json:"deadlineDate,omitempty"`
-	Material               *string `json:"material,omitempty"`
-	TimeSpent              *string `json:"timeSpent,omitempty"`
-	ExternalServices       *string `json:"externalServices,omitempty"`
-	Note                   *string `json:"note,omitempty"`
+	DateStarted            *time.Time `json:"dateStarted,omitempty"`
+	DateEnded              *time.Time `json:"dateEnded,omitempty"`
+	RepairDescription      *string    `json:"repairDescription,omitempty"`
+	MalfunctionDescription *string    `json:"malfunctionDescription,omitempty"`
+	DeadlineDate           *time.Time `json:"deadlineDate,omitempty"`
+	Material               *string    `json:"material,omitempty"`
+	TimeSpent              *string    `json:"timeSpent,omitempty"`
+	ExternalServices       *string    `json:"externalServices,omitempty"`
+	Note                   *string    `json:"note,omitempty"`
 }
 
 type CreateToolTypeInput struct {

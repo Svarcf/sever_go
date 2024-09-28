@@ -1,0 +1,66 @@
+{
+  "roles": [
+    {"name": "Admin"},
+    {"name": "User"},
+    {"name": "Manager"}
+  ],
+  "users": [
+    {"username": "admin_user", "first_name": "John", "last_name": "Doe", "password": "hashedpassword123", "role_name": "Admin"},
+    {"username": "tech_user", "first_name": "Jane", "last_name": "Smith", "password": "hashedpassword456", "role_name": "User"},
+    {"username": "manager_user", "first_name": "Jim", "last_name": "Beam", "password": "hashedpassword789", "role_name": "Manager"}
+  ],
+  "files": [
+    {"name": "Design Document", "location": "/documents/design.pdf"},
+    {"name": "Blueprint", "location": "/blueprints/blueprint_1.pdf"},
+    {"name": "Specification Sheet", "location": "/specs/spec_1.pdf"}
+  ],
+  "mechanical_presses": [
+    {"name": "Press 1", "code": "MP-001", "number": 101},
+    {"name": "Press 2", "code": "MP-002", "number": 102},
+    {"name": "Press 3", "code": "MP-003", "number": 103}
+  ],
+  "raw_materials": [
+    {"name": "Steel", "code": "RM-001", "number": 500},
+    {"name": "Aluminum", "code": "RM-002", "number": 300},
+    {"name": "Copper", "code": "RM-003", "number": 400}
+  ],
+  "standard_parts": [
+    {"name": "Bolt", "code": "SP-001", "number": 1000},
+    {"name": "Nut", "code": "SP-002", "number": 800},
+    {"name": "Washer", "code": "SP-003", "number": 600}
+  ],
+  "tool_types": [
+    {"name": "Hand Tool", "code": "TT-001"},
+    {"name": "Cutting Tool", "code": "TT-002"}
+  ],
+  "tools": [
+        {
+      "name": "Hammer Tool",
+      "code": "T-001",
+      "dimension": "5x5 cm",
+      "note": "Used for hammering",
+      "tool_stroke": "50 strokes/min",
+      "workpiece_description": "Metal Workpiece",
+      "tool_type_name": "Hand Tool",
+      "tool_association_name": "",
+      "raw_material_names": ["Steel", "Copper"],
+      "standard_part_names": ["Bolt"],
+      "mechanical_press_names": ["Press 1"]
+    },
+    {
+      "name": "Cutting Tool",
+      "code": "T-002",
+      "dimension": "3x2 cm",
+      "note": "Used for cutting",
+      "tool_stroke": "100 strokes/min",
+      "workpiece_description": "Plastic Workpiece",
+      "tool_type_name": "Cutting Tool",
+      "tool_association_name": "",
+      "raw_material_names": ["Aluminum"],
+      "standard_part_names": ["Nut"],
+      "mechanical_press_names": ["Press 2"]
+    },
+    {"name": "Press Tool", "code": "T-003", "dimension": "10x8 cm", "note": "Used for pressing", "tool_stroke": "70 strokes/min", "workpiece_description": "Steel Workpiece", "tool_type_name": "Hand Tool", "tool_association_name": "Hammer Tool"}
+  ]
+}
+

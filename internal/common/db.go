@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+
 	"github.com/Svarcf/sever_go/internal/config"
 	"github.com/Svarcf/sever_go/internal/models"
 	"gorm.io/driver/mysql"
@@ -26,6 +27,10 @@ func InitDB() *gorm.DB {
 		db.AutoMigrate(&models.ToolType{}, &models.Tool{}, &models.Role{}, &models.User{},
 			&models.File{}, &models.StandardPart{}, &models.MechanicalPress{},
 			&models.ToolRepairRecord{}, &models.RawMaterial{})
+
+		if cfg.DB_SEED {
+			seedDatabase(db)
+		}
 	}
 
 	DB = db

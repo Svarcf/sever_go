@@ -6,6 +6,7 @@ db:
   dialect: mysql
   port: 3306
   init: false
+  seed: false
 
 app:
   host: localhost

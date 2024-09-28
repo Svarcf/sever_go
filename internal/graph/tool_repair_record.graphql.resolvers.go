@@ -19,37 +19,17 @@ func (r *mutationResolver) CreateToolRepairRecord(ctx context.Context, createToo
 
 // ToolRepairRecords is the resolver for the toolRepairRecords field.
 func (r *queryResolver) ToolRepairRecords(ctx context.Context) ([]*models.ToolRepairRecord, error) {
-	panic(fmt.Errorf("not implemented: ToolRepairRecords - toolRepairRecords"))
+	return r.ToolRepairRecordService.GetToolRepairRecords()
 }
 
 // ToolRepairRecord is the resolver for the toolRepairRecord field.
 func (r *queryResolver) ToolRepairRecord(ctx context.Context, id uint) (*models.ToolRepairRecord, error) {
-	panic(fmt.Errorf("not implemented: ToolRepairRecord - toolRepairRecord"))
-}
-
-// DateStarted is the resolver for the dateStarted field.
-func (r *toolRepairRecordResolver) DateStarted(ctx context.Context, obj *models.ToolRepairRecord) (*string, error) {
-	panic(fmt.Errorf("not implemented: DateStarted - dateStarted"))
-}
-
-// DateEnded is the resolver for the dateEnded field.
-func (r *toolRepairRecordResolver) DateEnded(ctx context.Context, obj *models.ToolRepairRecord) (*string, error) {
-	panic(fmt.Errorf("not implemented: DateEnded - dateEnded"))
-}
-
-// DeadlineDate is the resolver for the deadlineDate field.
-func (r *toolRepairRecordResolver) DeadlineDate(ctx context.Context, obj *models.ToolRepairRecord) (*string, error) {
-	panic(fmt.Errorf("not implemented: DeadlineDate - deadlineDate"))
-}
-
-// TimeSpent is the resolver for the timeSpent field.
-func (r *toolRepairRecordResolver) TimeSpent(ctx context.Context, obj *models.ToolRepairRecord) (*string, error) {
-	panic(fmt.Errorf("not implemented: TimeSpent - timeSpent"))
+	return r.ToolRepairRecordService.GetToolRepairRecordById(id)
 }
 
 // User is the resolver for the user field.
 func (r *toolRepairRecordResolver) User(ctx context.Context, obj *models.ToolRepairRecord) (*models.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
+	return r.UserService.GetUserById(obj.UserID)
 }
 
 // ToolRepairRecord returns ToolRepairRecordResolver implementation.

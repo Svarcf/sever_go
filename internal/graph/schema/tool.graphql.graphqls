@@ -11,8 +11,7 @@ type Tool {
     id: ID!
     code: String!
     name: String!
-    creationDate: String
-    dimensions: String
+    dimension: String
     note: String
     toolStroke: String
     workpieceDescription: String

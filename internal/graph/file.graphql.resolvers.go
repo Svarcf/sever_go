@@ -19,12 +19,12 @@ func (r *mutationResolver) CreateFile(ctx context.Context, createFileInput *mode
 
 // Files is the resolver for the files field.
 func (r *queryResolver) Files(ctx context.Context) ([]*models.File, error) {
-	panic(fmt.Errorf("not implemented: Files - files"))
+	return r.FileService.GetFiles()
 }
 
 // File is the resolver for the file field.
 func (r *queryResolver) File(ctx context.Context, id uint) (*models.File, error) {
-	panic(fmt.Errorf("not implemented: File - file"))
+	return r.FileService.GetFileById(id)
 }
 
 // Mutation returns MutationResolver implementation.

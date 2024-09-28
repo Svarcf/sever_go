@@ -24,7 +24,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id uint) (*models.User, error) {
-	return r.UserService.GetUser(id)
+	return r.UserService.GetUserById(id)
 }
 
 // UserCreated is the resolver for the userCreated field.
@@ -34,7 +34,7 @@ func (r *subscriptionResolver) UserCreated(ctx context.Context) (<-chan *models.
 
 // Role is the resolver for the role field.
 func (r *userResolver) Role(ctx context.Context, obj *models.User) (*models.Role, error) {
-	return r.UserService.GetUserRole(obj)
+	return r.RoleService.GetRoleByID(obj.RoleID)
 }
 
 // Subscription returns SubscriptionResolver implementation.

@@ -12,6 +12,7 @@ type Config struct {
 	DB_USER  string
 	DB_NAME  string
 	DB_INIT  bool
+	DB_SEED  bool
 	APP_PORT string
 	APP_NAME string
 }
@@ -23,6 +24,7 @@ func LoadConfig() *Config {
 	viper.SetDefault("app.port", "8080")
 	viper.SetDefault("app.name", "sever-go")
 	viper.SetDefault("db.init", false)
+	viper.SetDefault("db.seed", false)
 
 	if err := viper.ReadInConfig(); err != nil {
 		panic(fmt.Sprintf("Error reading config file, %s", err))
@@ -34,6 +36,7 @@ func LoadConfig() *Config {
 		DB_PASS:  viper.GetString("db.pass"),
 		DB_USER:  viper.GetString("db.user"),
 		DB_NAME:  viper.GetString("db.name"),
+		DB_SEED:  viper.GetBool("db.seed"),
 		DB_INIT:  viper.GetBool("db.init"),
 		APP_PORT: viper.GetString("app.port"),
 		APP_NAME: viper.GetString("app.name"),

@@ -24,10 +24,10 @@ func (r *mutationResolver) UpdateStandardPart(ctx context.Context, updateStandar
 
 // StandardParts is the resolver for the standardParts field.
 func (r *queryResolver) StandardParts(ctx context.Context) ([]*models.StandardPart, error) {
-	panic(fmt.Errorf("not implemented: StandardParts - standardParts"))
+	return r.StandardPartService.GetStandardParts()
 }
 
 // StandardPart is the resolver for the standardPart field.
 func (r *queryResolver) StandardPart(ctx context.Context, id uint) (*models.StandardPart, error) {
-	panic(fmt.Errorf("not implemented: StandardPart - standardPart"))
+	return r.StandardPartService.GetStandardPartById(id)
 }
