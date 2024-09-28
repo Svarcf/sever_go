@@ -10,7 +10,6 @@ import (
 
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
-	"github.com/Svarcf/sever_go/internal/services"
 )
 
 // CreateUser is the resolver for the createUser field.
@@ -20,12 +19,12 @@ func (r *mutationResolver) CreateUser(ctx context.Context, createUserInput *mode
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
-	return services.GetUsers()
+	return r.UserService.GetUsers()
 }
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id uint) (*models.User, error) {
-	return services.GetUser(id)
+	return r.UserService.GetUser(id)
 }
 
 // UserCreated is the resolver for the userCreated field.
@@ -35,7 +34,7 @@ func (r *subscriptionResolver) UserCreated(ctx context.Context) (<-chan *models.
 
 // Role is the resolver for the role field.
 func (r *userResolver) Role(ctx context.Context, obj *models.User) (*models.Role, error) {
-	return services.GetUserRole(obj)
+	return r.UserService.GetUserRole(obj)
 }
 
 // Subscription returns SubscriptionResolver implementation.

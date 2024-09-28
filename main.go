@@ -1,21 +1,23 @@
 package main
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/Svarcf/sever_go/internal/common"
 	"github.com/Svarcf/sever_go/internal/config"
 	"github.com/Svarcf/sever_go/internal/graph"
-	"log"
-	"net/http"
+	"github.com/Svarcf/sever_go/internal/services"
 )
 
 func main() {
 	cfg := config.LoadConfig()
-	common.InitDB()
+	db := common.InitDB()
 	port := cfg.APP_PORT
-
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	userService := services.NewUserService(db)
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{UserService: userService}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
