@@ -1073,7 +1073,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "schema/file.graphql.graphqls" "schema/mechanicalPress.graphql.graphqls" "schema/rawMaterial.graphql.graphqls" "schema/role.graphql.graphqls" "schema/standardPart.graphql.graphqls" "schema/tool.graphql.graphqls" "schema/toolRepairRecord.graphql.graphqls" "schema/toolType.graphql.graphqls" "schema/users.graphql.graphqls"
+//go:embed "schema/file.graphql.graphqls" "schema/mechanical_press.graphql.graphqls" "schema/raw_material.graphql.graphqls" "schema/role.graphql.graphqls" "schema/standard_part.graphql.graphqls" "schema/tool.graphql.graphqls" "schema/tool_repair_record.graphql.graphqls" "schema/tool_type.graphql.graphqls" "schema/users.graphql.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1086,13 +1086,13 @@ func sourceData(filename string) string {
 
 var sources = []*ast.Source{
 	{Name: "schema/file.graphql.graphqls", Input: sourceData("schema/file.graphql.graphqls"), BuiltIn: false},
-	{Name: "schema/mechanicalPress.graphql.graphqls", Input: sourceData("schema/mechanicalPress.graphql.graphqls"), BuiltIn: false},
-	{Name: "schema/rawMaterial.graphql.graphqls", Input: sourceData("schema/rawMaterial.graphql.graphqls"), BuiltIn: false},
+	{Name: "schema/mechanical_press.graphql.graphqls", Input: sourceData("schema/mechanical_press.graphql.graphqls"), BuiltIn: false},
+	{Name: "schema/raw_material.graphql.graphqls", Input: sourceData("schema/raw_material.graphql.graphqls"), BuiltIn: false},
 	{Name: "schema/role.graphql.graphqls", Input: sourceData("schema/role.graphql.graphqls"), BuiltIn: false},
-	{Name: "schema/standardPart.graphql.graphqls", Input: sourceData("schema/standardPart.graphql.graphqls"), BuiltIn: false},
+	{Name: "schema/standard_part.graphql.graphqls", Input: sourceData("schema/standard_part.graphql.graphqls"), BuiltIn: false},
 	{Name: "schema/tool.graphql.graphqls", Input: sourceData("schema/tool.graphql.graphqls"), BuiltIn: false},
-	{Name: "schema/toolRepairRecord.graphql.graphqls", Input: sourceData("schema/toolRepairRecord.graphql.graphqls"), BuiltIn: false},
-	{Name: "schema/toolType.graphql.graphqls", Input: sourceData("schema/toolType.graphql.graphqls"), BuiltIn: false},
+	{Name: "schema/tool_repair_record.graphql.graphqls", Input: sourceData("schema/tool_repair_record.graphql.graphqls"), BuiltIn: false},
+	{Name: "schema/tool_type.graphql.graphqls", Input: sourceData("schema/tool_type.graphql.graphqls"), BuiltIn: false},
 	{Name: "schema/users.graphql.graphqls", Input: sourceData("schema/users.graphql.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)

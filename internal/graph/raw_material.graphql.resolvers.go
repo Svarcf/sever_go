@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Svarcf/sever_go/internal/common"
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
 )
@@ -25,13 +24,7 @@ func (r *mutationResolver) UpdateRawMaterial(ctx context.Context, updateRawMater
 
 // RawMaterials is the resolver for the rawMaterials field.
 func (r *queryResolver) RawMaterials(ctx context.Context) ([]*models.RawMaterial, error) {
-	context := common.GetContext(ctx)
-	var rawMaterials []*models.RawMaterial
-	err := context.Database.Find(&rawMaterials).Error
-	if err != nil {
-		return nil, err
-	}
-	return rawMaterials, nil
+	panic(fmt.Errorf("not implemented: RawMaterials - rawMaterials"))
 }
 
 // RawMaterial is the resolver for the rawMaterial field.

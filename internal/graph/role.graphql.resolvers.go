@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Svarcf/sever_go/internal/common"
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
 )
@@ -20,22 +19,10 @@ func (r *mutationResolver) CreateRole(ctx context.Context, createRoleInput *mode
 
 // Roles is the resolver for the roles field.
 func (r *queryResolver) Roles(ctx context.Context) ([]*models.Role, error) {
-	context := common.GetContext(ctx)
-	var roles []*models.Role
-	err := context.Database.Find(&roles).Error
-	if err != nil {
-		return nil, err
-	}
-	return roles, nil
+	panic(fmt.Errorf("not implemented: Roles - roles"))
 }
 
 // Role is the resolver for the role field.
 func (r *queryResolver) Role(ctx context.Context, id uint) (*models.Role, error) {
-	context := common.GetContext(ctx)
-	var role *models.Role
-	err := context.Database.Where("id = ?", id).First(&role).Error
-	if err != nil {
-		return nil, err
-	}
-	return role, nil
+	panic(fmt.Errorf("not implemented: Role - role"))
 }

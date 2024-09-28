@@ -12,15 +12,13 @@ import (
 
 func main() {
 	cfg := config.LoadConfig()
-	db := common.InitDB()
-
+	common.InitDB()
 	port := cfg.APP_PORT
-	ctx := &common.AppContext{Database: db}
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", common.CreateContext(ctx, srv))
+	http.Handle("/query", srv)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))

@@ -8,10 +8,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Svarcf/sever_go/internal/common"
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
-	"gorm.io/gorm"
+	"github.com/Svarcf/sever_go/internal/services"
 )
 
 // CreateUser is the resolver for the createUser field.
@@ -21,18 +20,12 @@ func (r *mutationResolver) CreateUser(ctx context.Context, createUserInput *mode
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
-	context := common.GetContext(ctx)
-	var users []*models.User
-	err := context.Database.Find(&users).Error
-	if err != nil {
-		return nil, err
-	}
-	return users, nil
+	return services.GetUsers()
 }
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id uint) (*models.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
+	return services.GetUser(id)
 }
 
 // UserCreated is the resolver for the userCreated field.
@@ -42,20 +35,7 @@ func (r *subscriptionResolver) UserCreated(ctx context.Context) (<-chan *models.
 
 // Role is the resolver for the role field.
 func (r *userResolver) Role(ctx context.Context, obj *models.User) (*models.Role, error) {
-	// Create a variable to hold the fetched role
-	var role models.Role
-	context := common.GetContext(ctx)
-
-	// Use GORM to find the role based on the RoleID field in the User
-	if err := context.Database.First(&role, obj.RoleID).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return nil, fmt.Errorf("role not found for user with RoleID %d", obj.RoleID)
-		}
-		return nil, err
-	}
-
-	// Return the fetched role
-	return &role, nil
+	return services.GetUserRole(obj)
 }
 
 // Subscription returns SubscriptionResolver implementation.

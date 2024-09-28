@@ -10,6 +10,8 @@ import (
 
 var DB *gorm.DB
 
+func GetDB() *gorm.DB { return DB }
+
 func InitDB() *gorm.DB {
 	cfg := config.LoadConfig()
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
@@ -25,5 +27,7 @@ func InitDB() *gorm.DB {
 			&models.File{}, &models.StandardPart{}, &models.MechanicalPress{},
 			&models.ToolRepairRecord{}, &models.RawMaterial{})
 	}
+
+	DB = db
 	return db
 }
