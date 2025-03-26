@@ -114,3 +114,7 @@ models:
         resolver: true
       toolRepairRecords:
         resolver: true
+  ToolRepairRecord:
+    fields:
+      tool:
+        resolver: true

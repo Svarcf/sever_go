@@ -60,7 +60,44 @@
       "standard_part_names": ["Nut"],
       "mechanical_press_names": ["Press 2"]
     },
-    {"name": "Press Tool", "code": "T-003", "dimension": "10x8 cm", "note": "Used for pressing", "tool_stroke": "70 strokes/min", "workpiece_description": "Steel Workpiece", "tool_type_name": "Hand Tool", "tool_association_name": "Hammer Tool"}
+    {
+      "name": "Press Tool", 
+      "code": "T-003", 
+      "dimension": "10x8 cm", 
+      "note": "Used for pressing", 
+      "tool_stroke": "70 strokes/min", 
+      "workpiece_description": "Steel Workpiece", 
+      "tool_type_name": "Hand Tool", 
+      "tool_association_name": "Hammer Tool"
+    }
+  ],
+  "tool_repair_records": [
+    {
+      "date_started": "2023-10-26T10:00:00Z",
+      "date_ended": "2023-10-27T12:00:00Z",
+      "repair_description": "Welding repair",
+      "malfunction_description": "Crack in the frame",
+      "deadline_date": "2023-10-30T00:00:00Z",
+      "material": "Steel",
+      "time_spent": 14,
+      "external_services": "None",
+      "note": "Repaired successfully",
+      "tool_code": "T-001",
+      "repaired_by_username": "tech_user"
+    },
+    {
+      "date_started": "2023-11-01T09:00:00Z",
+      "date_ended": "2023-11-01T15:00:00Z",
+      "repair_description": "Bearing replacement",
+      "malfunction_description": "Worn bearings",
+      "deadline_date": "2023-11-05T00:00:00Z",
+      "material": "Bearing set",
+      "time_spent": 6,
+      "external_services": "None",
+      "note": "Replaced with new bearings",
+      "tool_code": "T-002",
+      "repaired_by_username": "admin_user"
+    }
   ]
 }
 

@@ -27,6 +27,11 @@ func (r *queryResolver) ToolRepairRecord(ctx context.Context, id uint) (*models.
 	return r.ToolRepairRecordService.GetToolRepairRecordById(id)
 }
 
+// Tool is the resolver for the tool field.
+func (r *toolRepairRecordResolver) Tool(ctx context.Context, obj *models.ToolRepairRecord) (*models.Tool, error) {
+	return r.ToolService.GetToolById(obj.ToolID)
+}
+
 // User is the resolver for the user field.
 func (r *toolRepairRecordResolver) User(ctx context.Context, obj *models.ToolRepairRecord) (*models.User, error) {
 	return r.UserService.GetUserById(obj.UserID)

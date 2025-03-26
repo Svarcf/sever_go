@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/Svarcf/sever_go/internal/models"
 	"gorm.io/gorm"
@@ -18,6 +19,7 @@ type SeedData struct {
 	StandardParts     []models.StandardPart    `json:"standard_parts"`
 	ToolTypes         []models.ToolType        `json:"tool_types"`
 	Tools             []ToolSeed               `json:"tools"`
+	ToolRepairRecords []ToolRepairRecordSeed   `json:"tool_repair_records"`
 }
 
 // For Users, as we need to map by role name instead of role ID
@@ -42,6 +44,20 @@ type ToolSeed struct {
 	RawMaterialNames     []string `json:"raw_material_names"`
 	StandardPartNames    []string `json:"standard_part_names"`
 	MechanicalPressNames []string `json:"mechanical_press_names"`
+}
+
+type ToolRepairRecordSeed struct {
+	DateStarted            time.Time `json:"date_started"`
+	DateEnded              time.Time `json:"date_ended"`
+	RepairDescription      string    `json:"repair_description"`
+	MalfunctionDescription string    `json:"malfunction_description"`
+	DeadlineDate           time.Time `json:"deadline_date"`
+	Material               string    `json:"material"`
+	TimeSpent              int       `json:"time_spent"`
+	ExternalServices       string    `json:"external_services"`
+	Note                   string    `json:"note"`
+	ToolCode               string    `json:"tool_code"`
+	RepairedByUsername     string    `json:"repaired_by_username"`
 }
 
 func seedDatabase(db *gorm.DB) {
@@ -155,5 +171,29 @@ func seedDatabase(db *gorm.DB) {
 		}
 
 		db.Create(&tool)
+	}
+
+	// Seed tool repair records
+	for _, repairSeed := range seedData.ToolRepairRecords {
+		var tool models.Tool
+		db.First(&tool, "code = ?", repairSeed.ToolCode)
+
+		var user models.User
+		db.First(&user, "username = ?", repairSeed.RepairedByUsername)
+
+		repairRecord := models.ToolRepairRecord{
+			DateStarted:            repairSeed.DateStarted,
+			DateEnded:              repairSeed.DateEnded,
+			RepairDescription:      repairSeed.RepairDescription,
+			MalfunctionDescription: repairSeed.MalfunctionDescription,
+			DeadlineDate:           repairSeed.DeadlineDate,
+			Material:               repairSeed.Material,
+			TimeSpent:              repairSeed.TimeSpent,
+			ExternalServices:       repairSeed.ExternalServices,
+			Note:                   repairSeed.Note,
+			ToolID:                 tool.Id,
+			UserID:                 user.Id,
+		}
+		db.Create(&repairRecord)
 	}
 }
