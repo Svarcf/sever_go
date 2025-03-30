@@ -7,3 +7,7 @@ type RawMaterial struct {
 	Number int
 	Tools  []*Tool `gorm:"many2many:tools_rawmaterials;"`
 }
+
+func NewRawMaterial(code string, name string, number int) *RawMaterial {
+	return &RawMaterial{Name: name, Code: code, Number: number}
+}
