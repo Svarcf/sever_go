@@ -14,7 +14,8 @@ import (
 
 // CreateFile is the resolver for the createFile field.
 func (r *mutationResolver) CreateFile(ctx context.Context, createFileInput *model.CreateFileInput) (*models.File, error) {
-	panic(fmt.Errorf("not implemented: CreateFile - createFile"))
+	file := models.NewFile(createFileInput.Name, createFileInput.Location)
+	return r.FileService.CreateFile(file)
 }
 
 // Files is the resolver for the files field.

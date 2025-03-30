@@ -5,3 +5,7 @@ type File struct {
 	Name     string
 	Location string
 }
+
+func NewFile(name string, location string) *File {
+	return &File{Name: name, Location: location}
+}

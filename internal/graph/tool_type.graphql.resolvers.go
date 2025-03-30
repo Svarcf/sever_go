@@ -7,14 +7,17 @@ package graph
 import (
 	"context"
 	"fmt"
-
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
 )
 
 // CreateToolType is the resolver for the createToolType field.
 func (r *mutationResolver) CreateToolType(ctx context.Context, createToolTypeInput *model.CreateToolTypeInput) (*models.ToolType, error) {
-	panic(fmt.Errorf("not implemented: CreateToolType - createToolType"))
+	toolType := models.NewToolType(
+		createToolTypeInput.Code,
+		createToolTypeInput.Name,
+	)
+	return r.ToolTypeService.CreateToolType(toolType)
 }
 
 // UpdateToolType is the resolver for the updateToolType field.

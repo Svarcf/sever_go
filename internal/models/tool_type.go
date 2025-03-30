@@ -6,3 +6,7 @@ type ToolType struct {
 	Code  string `gorm:"unique"`
 	Tools []Tool
 }
+
+func NewToolType(code string, name string) *ToolType {
+	return &ToolType{Name: name, Code: code}
+}

@@ -13,6 +13,14 @@ func NewToolTypeService(db *gorm.DB) *ToolTypeService {
 	return &ToolTypeService{DB: db}
 }
 
+func (s *ToolTypeService) CreateToolType(toolType *models.ToolType) (*models.ToolType, error) {
+	err := s.DB.Create(toolType).Error
+	if err != nil {
+		return nil, err
+	}
+	return toolType, nil
+}
+
 func (s *ToolTypeService) GetToolTypeByCode(code string) (*models.ToolType, error) {
 	var toolType *models.ToolType
 	err := s.DB.Where("code = ?", code).First(&toolType).Error
