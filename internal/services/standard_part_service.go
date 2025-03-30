@@ -13,6 +13,14 @@ func NewStandardPartService(db *gorm.DB) *StandardPartService {
 	return &StandardPartService{DB: db}
 }
 
+func (s *StandardPartService) CreateStandardPart(standardPart *models.StandardPart) (*models.StandardPart, error) {
+	err := s.DB.Create(standardPart).Error
+	if err != nil {
+		return nil, err
+	}
+	return standardPart, nil
+}
+
 func (s *StandardPartService) GetStandardPartById(id uint) (*models.StandardPart, error) {
 	var standardPart *models.StandardPart
 	err := s.DB.First(&standardPart, id).Error

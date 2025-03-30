@@ -21,7 +21,9 @@ type ToolRepairRecord struct {
 	RepairedBy             User `gorm:"foreignKey:UserID"`
 }
 
-func NewToolRepairRecord(dateStarted time.Time, dateEnded time.Time, repairDescription string, malfunctionDescription string, deadlineDate time.Time, material string, timeSpent int, externalServices string, note string, toolID uint, userID uint) *ToolRepairRecord {
+func NewToolRepairRecord(dateStarted time.Time, dateEnded time.Time, repairDescription string,
+	malfunctionDescription string, deadlineDate time.Time, material string, timeSpent int, externalServices string,
+	note string, toolID uint, userID uint) *ToolRepairRecord {
 	return &ToolRepairRecord{
 		DateStarted:            dateStarted,
 		DateEnded:              dateEnded,

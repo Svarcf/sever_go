@@ -14,7 +14,12 @@ import (
 
 // CreateStandardPart is the resolver for the createStandardPart field.
 func (r *mutationResolver) CreateStandardPart(ctx context.Context, createStandardPartInput *model.CreateStandardPartInput) (*models.StandardPart, error) {
-	panic(fmt.Errorf("not implemented: CreateStandardPart - createStandardPart"))
+	standardPart := models.NewStandardPart(
+		createStandardPartInput.Code,
+		createStandardPartInput.Name,
+		1,
+	)
+	return r.StandardPartService.CreateStandardPart(standardPart)
 }
 
 // UpdateStandardPart is the resolver for the updateStandardPart field.

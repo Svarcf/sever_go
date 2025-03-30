@@ -14,7 +14,11 @@ import (
 
 // CreateRawMaterial is the resolver for the createRawMaterial field.
 func (r *mutationResolver) CreateRawMaterial(ctx context.Context, createRawMaterialInput *model.CreateRawMaterialInput) (*models.RawMaterial, error) {
-	panic(fmt.Errorf("not implemented: CreateRawMaterial - createRawMaterial"))
+	rawMaterial := models.NewRawMaterial(
+		createRawMaterialInput.Code,
+		createRawMaterialInput.Name,
+		1)
+	return r.RawMaterialService.CreateRawMaterial(rawMaterial)
 }
 
 // UpdateRawMaterial is the resolver for the updateRawMaterial field.

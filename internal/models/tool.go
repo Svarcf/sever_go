@@ -18,7 +18,8 @@ type Tool struct {
 	MechanicalPresses    []*MechanicalPress `gorm:"many2many:tools_mechanicalpresses;"`
 }
 
-func NewTool(code string, name string, dimension string, note string, toolStroke string, workpieceDescription string, toolTypeID uint, toolAssociationID *uint) *Tool {
+func NewTool(code string, name string, dimension string, note string, toolStroke string,
+	workpieceDescription string, toolTypeID uint, toolAssociationID *uint) *Tool {
 	return &Tool{
 		Name:                 name,
 		Code:                 code,

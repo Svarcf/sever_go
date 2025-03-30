@@ -13,6 +13,14 @@ func NewRawMaterialService(db *gorm.DB) *RawMaterialService {
 	return &RawMaterialService{DB: db}
 }
 
+func (s *RawMaterialService) CreateRawMaterial(rawMaterial *models.RawMaterial) (*models.RawMaterial, error) {
+	err := s.DB.Create(rawMaterial).Error
+	if err != nil {
+		return nil, err
+	}
+	return rawMaterial, nil
+}
+
 func (s *RawMaterialService) GetRawMaterialById(id uint) (*models.RawMaterial, error) {
 	var rawMaterial *models.RawMaterial
 	err := s.DB.First(&rawMaterial, id).Error

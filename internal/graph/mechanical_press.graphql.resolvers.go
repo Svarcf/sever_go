@@ -14,7 +14,12 @@ import (
 
 // CreateMechanicalPress is the resolver for the createMechanicalPress field.
 func (r *mutationResolver) CreateMechanicalPress(ctx context.Context, createMechanicalPressInput *model.CreateMechanicalPressInput) (*models.MechanicalPress, error) {
-	panic(fmt.Errorf("not implemented: CreateMechanicalPress - createMechanicalPress"))
+	mechanicalPress := models.NewMechanicalPress(
+		createMechanicalPressInput.Code,
+		createMechanicalPressInput.Name,
+		1,
+	)
+	return r.MechanicalPressService.CreateMechanicalPress(mechanicalPress)
 }
 
 // UpdateMechanicalPress is the resolver for the updateMechanicalPress field.

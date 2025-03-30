@@ -13,7 +13,7 @@ func NewFileService(db *gorm.DB) *FileService {
 	return &FileService{DB: db}
 }
 
-func (s *FileService) createFile(file *models.File) (*models.File, error) {
+func (s *FileService) CreateFile(file *models.File) (*models.File, error) {
 	err := s.DB.Create(file).Error
 	if err != nil {
 		return nil, err
