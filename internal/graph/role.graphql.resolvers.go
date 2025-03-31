@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"

@@ -136,6 +136,7 @@ type ComplexityRoot struct {
 		Note                 func(childComplexity int) int
 		RawMaterials         func(childComplexity int) int
 		StandardParts        func(childComplexity int) int
+		ToolAssociation      func(childComplexity int) int
 		ToolRepairRecords    func(childComplexity int) int
 		ToolStroke           func(childComplexity int) int
 		ToolType             func(childComplexity int) int
@@ -213,6 +214,7 @@ type SubscriptionResolver interface {
 }
 type ToolResolver interface {
 	ToolType(ctx context.Context, obj *models.Tool) (*models.ToolType, error)
+
 	RawMaterials(ctx context.Context, obj *models.Tool) ([]*models.RawMaterial, error)
 	StandardParts(ctx context.Context, obj *models.Tool) ([]*models.StandardPart, error)
 	MechanicalPresses(ctx context.Context, obj *models.Tool) ([]*models.MechanicalPress, error)
@@ -753,6 +755,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Tool.StandardParts(childComplexity), true
+
+	case "Tool.toolAssociation":
+		if e.complexity.Tool.ToolAssociation == nil {
+			break
+		}
+
+		return e.complexity.Tool.ToolAssociation(childComplexity), true
 
 	case "Tool.toolRepairRecords":
 		if e.complexity.Tool.ToolRepairRecords == nil {
@@ -1990,6 +1999,8 @@ func (ec *executionContext) fieldContext_MechanicalPress_tools(_ context.Context
 				return ec.fieldContext_Tool_workpieceDescription(ctx, field)
 			case "toolType":
 				return ec.fieldContext_Tool_toolType(ctx, field)
+			case "toolAssociation":
+				return ec.fieldContext_Tool_toolAssociation(ctx, field)
 			case "rawMaterials":
 				return ec.fieldContext_Tool_rawMaterials(ctx, field)
 			case "standardParts":
@@ -2547,6 +2558,8 @@ func (ec *executionContext) fieldContext_Mutation_createTool(ctx context.Context
 				return ec.fieldContext_Tool_workpieceDescription(ctx, field)
 			case "toolType":
 				return ec.fieldContext_Tool_toolType(ctx, field)
+			case "toolAssociation":
+				return ec.fieldContext_Tool_toolAssociation(ctx, field)
 			case "rawMaterials":
 				return ec.fieldContext_Tool_rawMaterials(ctx, field)
 			case "standardParts":
@@ -3444,6 +3457,8 @@ func (ec *executionContext) fieldContext_Query_tools(_ context.Context, field gr
 				return ec.fieldContext_Tool_workpieceDescription(ctx, field)
 			case "toolType":
 				return ec.fieldContext_Tool_toolType(ctx, field)
+			case "toolAssociation":
+				return ec.fieldContext_Tool_toolAssociation(ctx, field)
 			case "rawMaterials":
 				return ec.fieldContext_Tool_rawMaterials(ctx, field)
 			case "standardParts":
@@ -3511,6 +3526,8 @@ func (ec *executionContext) fieldContext_Query_tool(ctx context.Context, field g
 				return ec.fieldContext_Tool_workpieceDescription(ctx, field)
 			case "toolType":
 				return ec.fieldContext_Tool_toolType(ctx, field)
+			case "toolAssociation":
+				return ec.fieldContext_Tool_toolAssociation(ctx, field)
 			case "rawMaterials":
 				return ec.fieldContext_Tool_rawMaterials(ctx, field)
 			case "standardParts":
@@ -4889,6 +4906,75 @@ func (ec *executionContext) fieldContext_Tool_toolType(_ context.Context, field 
 	return fc, nil
 }
 
+func (ec *executionContext) _Tool_toolAssociation(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Tool_toolAssociation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ToolAssociation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Tool)
+	fc.Result = res
+	return ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Tool_toolAssociation(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Tool",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Tool_id(ctx, field)
+			case "code":
+				return ec.fieldContext_Tool_code(ctx, field)
+			case "name":
+				return ec.fieldContext_Tool_name(ctx, field)
+			case "dimension":
+				return ec.fieldContext_Tool_dimension(ctx, field)
+			case "note":
+				return ec.fieldContext_Tool_note(ctx, field)
+			case "toolStroke":
+				return ec.fieldContext_Tool_toolStroke(ctx, field)
+			case "workpieceDescription":
+				return ec.fieldContext_Tool_workpieceDescription(ctx, field)
+			case "toolType":
+				return ec.fieldContext_Tool_toolType(ctx, field)
+			case "toolAssociation":
+				return ec.fieldContext_Tool_toolAssociation(ctx, field)
+			case "rawMaterials":
+				return ec.fieldContext_Tool_rawMaterials(ctx, field)
+			case "standardParts":
+				return ec.fieldContext_Tool_standardParts(ctx, field)
+			case "mechanicalPresses":
+				return ec.fieldContext_Tool_mechanicalPresses(ctx, field)
+			case "toolRepairRecords":
+				return ec.fieldContext_Tool_toolRepairRecords(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Tool", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Tool_rawMaterials(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_rawMaterials(ctx, field)
 	if err != nil {
@@ -5574,6 +5660,8 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_tool(_ context.Context
 				return ec.fieldContext_Tool_workpieceDescription(ctx, field)
 			case "toolType":
 				return ec.fieldContext_Tool_toolType(ctx, field)
+			case "toolAssociation":
+				return ec.fieldContext_Tool_toolAssociation(ctx, field)
 			case "rawMaterials":
 				return ec.fieldContext_Tool_rawMaterials(ctx, field)
 			case "standardParts":
@@ -5826,6 +5914,8 @@ func (ec *executionContext) fieldContext_ToolType_tools(_ context.Context, field
 				return ec.fieldContext_Tool_workpieceDescription(ctx, field)
 			case "toolType":
 				return ec.fieldContext_Tool_toolType(ctx, field)
+			case "toolAssociation":
+				return ec.fieldContext_Tool_toolAssociation(ctx, field)
 			case "rawMaterials":
 				return ec.fieldContext_Tool_rawMaterials(ctx, field)
 			case "standardParts":
@@ -7835,20 +7925,13 @@ func (ec *executionContext) unmarshalInputCreateFileInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"code", "name", "location"}
+	fieldsInOrder := [...]string{"name", "location"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "code":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-			data, err := ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Code = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -8019,7 +8102,7 @@ func (ec *executionContext) unmarshalInputCreateToolInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"code", "name", "creationDate", "dimensions", "note", "toolStroke", "workpieceDescription"}
+	fieldsInOrder := [...]string{"code", "name", "creationDate", "dimensions", "note", "toolStroke", "workpieceDescription", "toolType", "toolAssociation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -8075,6 +8158,20 @@ func (ec *executionContext) unmarshalInputCreateToolInput(ctx context.Context, o
 				return it, err
 			}
 			it.WorkpieceDescription = data
+		case "toolType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("toolType"))
+			data, err := ec.unmarshalOID2ᚖuint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ToolType = data
+		case "toolAssociation":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("toolAssociation"))
+			data, err := ec.unmarshalOID2ᚖuint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ToolAssociation = data
 		}
 	}
 
@@ -8088,7 +8185,7 @@ func (ec *executionContext) unmarshalInputCreateToolRepairRecordInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"dateStarted", "dateEnded", "repairDescription", "malfunctionDescription", "deadlineDate", "material", "timeSpent", "externalServices", "note"}
+	fieldsInOrder := [...]string{"dateStarted", "dateEnded", "repairDescription", "malfunctionDescription", "deadlineDate", "material", "timeSpent", "externalServices", "note", "user"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -8158,6 +8255,13 @@ func (ec *executionContext) unmarshalInputCreateToolRepairRecordInput(ctx contex
 				return it, err
 			}
 			it.Note = data
+		case "user":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("user"))
+			data, err := ec.unmarshalOID2ᚖuint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.User = data
 		}
 	}
 
@@ -9251,6 +9355,8 @@ func (ec *executionContext) _Tool(ctx context.Context, sel ast.SelectionSet, obj
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "toolAssociation":
+			out.Values[i] = ec._Tool_toolAssociation(ctx, field, obj)
 		case "rawMaterials":
 			field := field
 
@@ -10441,6 +10547,22 @@ func (ec *executionContext) marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋi
 		return graphql.Null
 	}
 	return ec._File(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOID2ᚖuint(ctx context.Context, v interface{}) (*uint, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalUintID(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOID2ᚖuint(ctx context.Context, sel ast.SelectionSet, v *uint) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalUintID(*v)
+	return res
 }
 
 func (ec *executionContext) unmarshalOInt2int(ctx context.Context, v interface{}) (int, error) {

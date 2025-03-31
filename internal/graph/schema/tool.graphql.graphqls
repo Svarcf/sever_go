@@ -16,6 +16,7 @@ type Tool {
     toolStroke: String
     workpieceDescription: String
     toolType: ToolType
+    toolAssociation: Tool
     rawMaterials: [RawMaterial]
     standardParts: [StandardPart]
     mechanicalPresses: [MechanicalPress]
@@ -30,4 +31,6 @@ input CreateToolInput {
     note: String
     toolStroke: String
     workpieceDescription: String
+    toolType: ID
+    toolAssociation: ID 
 }

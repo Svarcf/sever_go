@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
@@ -14,7 +13,35 @@ import (
 
 // CreateTool is the resolver for the createTool field.
 func (r *mutationResolver) CreateTool(ctx context.Context, createToolInput *model.CreateToolInput) (*models.Tool, error) {
-	panic(fmt.Errorf("not implemented: CreateTool - createTool"))
+	var dimensions, note, toolStroke, workpieceDescription string
+	var toolType uint
+	if createToolInput.Dimensions != nil {
+		dimensions = *createToolInput.Dimensions
+	}
+	if createToolInput.Note != nil {
+		note = *createToolInput.Note
+	}
+	if createToolInput.ToolStroke != nil {
+		toolStroke = *createToolInput.ToolStroke
+	}
+	if createToolInput.WorkpieceDescription != nil {
+		workpieceDescription = *createToolInput.WorkpieceDescription
+	}
+	if createToolInput.ToolType != nil {
+		toolType = *createToolInput.ToolType
+	}
+
+	tool := models.NewTool(
+		createToolInput.Code,
+		createToolInput.Name,
+		dimensions,
+		note,
+		toolStroke,
+		workpieceDescription,
+		toolType,
+		createToolInput.ToolAssociation,
+	)
+	return r.ToolService.CreateTool(tool)
 }
 
 // Tools is the resolver for the tools field.

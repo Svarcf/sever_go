@@ -13,6 +13,14 @@ func NewToolService(db *gorm.DB) *ToolService {
 	return &ToolService{DB: db}
 }
 
+func (s *ToolService) CreateTool(tool *models.Tool) (*models.Tool, error) {
+	err := s.DB.Create(tool).Error
+	if err != nil {
+		return nil, err
+	}
+	return tool, nil
+}
+
 func (s *ToolService) GetToolById(id uint) (*models.Tool, error) {
 	var tool *models.Tool
 	err := s.DB.First(&tool, id).Error

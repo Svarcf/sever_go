@@ -7,7 +7,6 @@ import (
 )
 
 type CreateFileInput struct {
-	Code     string `json:"code"`
 	Name     string `json:"name"`
 	Location string `json:"location"`
 }
@@ -41,6 +40,8 @@ type CreateToolInput struct {
 	Note                 *string `json:"note,omitempty"`
 	ToolStroke           *string `json:"toolStroke,omitempty"`
 	WorkpieceDescription *string `json:"workpieceDescription,omitempty"`
+	ToolType             *uint   `json:"toolType,omitempty"`
+	ToolAssociation      *uint   `json:"toolAssociation,omitempty"`
 }
 
 type CreateToolRepairRecordInput struct {
@@ -53,6 +54,7 @@ type CreateToolRepairRecordInput struct {
 	TimeSpent              *string    `json:"timeSpent,omitempty"`
 	ExternalServices       *string    `json:"externalServices,omitempty"`
 	Note                   *string    `json:"note,omitempty"`
+	User                   *uint      `json:"user,omitempty"`
 }
 
 type CreateToolTypeInput struct {
