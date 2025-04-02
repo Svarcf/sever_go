@@ -11,7 +11,7 @@ type ToolRepairRecord struct {
 	RepairDescription      string
 	MalfunctionDescription string
 	DeadlineDate           time.Time
-	Material               string
+	MaterialID             uint
 	TimeSpent              int
 	ExternalServices       string
 	Note                   string
@@ -22,7 +22,7 @@ type ToolRepairRecord struct {
 }
 
 func NewToolRepairRecord(dateStarted time.Time, dateEnded time.Time, repairDescription string,
-	malfunctionDescription string, deadlineDate time.Time, material string, timeSpent int, externalServices string,
+	malfunctionDescription string, deadlineDate time.Time, materialID *uint, timeSpent int, externalServices string,
 	note string, toolID uint, userID uint) *ToolRepairRecord {
 	return &ToolRepairRecord{
 		DateStarted:            dateStarted,
@@ -30,7 +30,7 @@ func NewToolRepairRecord(dateStarted time.Time, dateEnded time.Time, repairDescr
 		RepairDescription:      repairDescription,
 		MalfunctionDescription: malfunctionDescription,
 		DeadlineDate:           deadlineDate,
-		Material:               material,
+		MaterialID:             *materialID,
 		TimeSpent:              timeSpent,
 		ExternalServices:       externalServices,
 		Note:                   note,

@@ -52,7 +52,7 @@ type ToolRepairRecordSeed struct {
 	RepairDescription      string    `json:"repair_description"`
 	MalfunctionDescription string    `json:"malfunction_description"`
 	DeadlineDate           time.Time `json:"deadline_date"`
-	Material               string    `json:"material"`
+	Material               uint      `json:"material"`
 	TimeSpent              int       `json:"time_spent"`
 	ExternalServices       string    `json:"external_services"`
 	Note                   string    `json:"note"`
@@ -187,7 +187,7 @@ func seedDatabase(db *gorm.DB) {
 			RepairDescription:      repairSeed.RepairDescription,
 			MalfunctionDescription: repairSeed.MalfunctionDescription,
 			DeadlineDate:           repairSeed.DeadlineDate,
-			Material:               repairSeed.Material,
+			MaterialID:             repairSeed.Material,
 			TimeSpent:              repairSeed.TimeSpent,
 			ExternalServices:       repairSeed.ExternalServices,
 			Note:                   repairSeed.Note,

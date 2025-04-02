@@ -50,11 +50,12 @@ type CreateToolRepairRecordInput struct {
 	RepairDescription      *string    `json:"repairDescription,omitempty"`
 	MalfunctionDescription *string    `json:"malfunctionDescription,omitempty"`
 	DeadlineDate           *time.Time `json:"deadlineDate,omitempty"`
-	Material               *string    `json:"material,omitempty"`
-	TimeSpent              *string    `json:"timeSpent,omitempty"`
+	TimeSpent              *int       `json:"timeSpent,omitempty"`
 	ExternalServices       *string    `json:"externalServices,omitempty"`
 	Note                   *string    `json:"note,omitempty"`
 	User                   *uint      `json:"user,omitempty"`
+	Tool                   *uint      `json:"tool,omitempty"`
+	Material               *uint      `json:"material,omitempty"`
 }
 
 type CreateToolTypeInput struct {

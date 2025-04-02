@@ -14,7 +14,63 @@ import (
 
 // CreateToolRepairRecord is the resolver for the createToolRepairRecord field.
 func (r *mutationResolver) CreateToolRepairRecord(ctx context.Context, createToolRepairRecordInput *model.CreateToolRepairRecordInput) (*models.ToolRepairRecord, error) {
-	panic(fmt.Errorf("not implemented: CreateToolRepairRecord - createToolRepairRecord"))
+	// Validate required fields
+	if createToolRepairRecordInput.Tool == nil {
+		return nil, fmt.Errorf("tool is required")
+	}
+	toolID := *createToolRepairRecordInput.Tool
+
+	if createToolRepairRecordInput.User == nil {
+		return nil, fmt.Errorf("user is required")
+	}
+	userID := *createToolRepairRecordInput.User
+
+	// For string pointers, use empty string if nil
+	repairDescription := ""
+	if createToolRepairRecordInput.RepairDescription != nil {
+		repairDescription = *createToolRepairRecordInput.RepairDescription
+	}
+
+	note := ""
+	if createToolRepairRecordInput.Note != nil {
+		note = *createToolRepairRecordInput.Note
+	}
+
+	externalService := ""
+	if createToolRepairRecordInput.ExternalServices != nil {
+		externalService = *createToolRepairRecordInput.ExternalServices
+	}
+
+	var materialID uint
+	if createToolRepairRecordInput.Material != nil {
+		materialID = *createToolRepairRecordInput.Material
+	}
+
+	toolRepairRecord := models.ToolRepairRecord{
+		RepairDescription:      repairDescription,
+		Note:                   note,
+		ExternalServices:       externalService,
+		ToolID:                 toolID,
+		MaterialID:             materialID,
+		UserID:                 userID,
+		MalfunctionDescription: *createToolRepairRecordInput.MalfunctionDescription,
+		TimeSpent:              *createToolRepairRecordInput.TimeSpent,
+	}
+
+	// Handle date fields carefully - these might need to be nil
+	if createToolRepairRecordInput.DateStarted != nil {
+		toolRepairRecord.DateStarted = *createToolRepairRecordInput.DateStarted
+	}
+
+	if createToolRepairRecordInput.DateEnded != nil {
+		toolRepairRecord.DateEnded = *createToolRepairRecordInput.DateEnded
+	}
+
+	if createToolRepairRecordInput.DeadlineDate != nil {
+		toolRepairRecord.DeadlineDate = *createToolRepairRecordInput.DeadlineDate
+	}
+
+	return r.ToolRepairRecordService.CreateToolRepairRecord(&toolRepairRecord)
 }
 
 // ToolRepairRecords is the resolver for the toolRepairRecords field.
@@ -25,6 +81,11 @@ func (r *queryResolver) ToolRepairRecords(ctx context.Context) ([]*models.ToolRe
 // ToolRepairRecord is the resolver for the toolRepairRecord field.
 func (r *queryResolver) ToolRepairRecord(ctx context.Context, id uint) (*models.ToolRepairRecord, error) {
 	return r.ToolRepairRecordService.GetToolRepairRecordById(id)
+}
+
+// RawMaterial is the resolver for the rawMaterial field.
+func (r *toolRepairRecordResolver) RawMaterial(ctx context.Context, obj *models.ToolRepairRecord) (*models.RawMaterial, error) {
+	return r.RawMaterialService.GetRawMaterialById(obj.MaterialID)
 }
 
 // Tool is the resolver for the tool field.

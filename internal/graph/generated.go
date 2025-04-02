@@ -150,8 +150,8 @@ type ComplexityRoot struct {
 		ExternalServices       func(childComplexity int) int
 		Id                     func(childComplexity int) int
 		MalfunctionDescription func(childComplexity int) int
-		Material               func(childComplexity int) int
 		Note                   func(childComplexity int) int
+		RawMaterial            func(childComplexity int) int
 		RepairDescription      func(childComplexity int) int
 		TimeSpent              func(childComplexity int) int
 		Tool                   func(childComplexity int) int
@@ -221,6 +221,8 @@ type ToolResolver interface {
 	ToolRepairRecords(ctx context.Context, obj *models.Tool) ([]*models.ToolRepairRecord, error)
 }
 type ToolRepairRecordResolver interface {
+	RawMaterial(ctx context.Context, obj *models.ToolRepairRecord) (*models.RawMaterial, error)
+
 	Tool(ctx context.Context, obj *models.ToolRepairRecord) (*models.Tool, error)
 	User(ctx context.Context, obj *models.ToolRepairRecord) (*models.User, error)
 }
@@ -833,19 +835,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ToolRepairRecord.MalfunctionDescription(childComplexity), true
 
-	case "ToolRepairRecord.material":
-		if e.complexity.ToolRepairRecord.Material == nil {
-			break
-		}
-
-		return e.complexity.ToolRepairRecord.Material(childComplexity), true
-
 	case "ToolRepairRecord.note":
 		if e.complexity.ToolRepairRecord.Note == nil {
 			break
 		}
 
 		return e.complexity.ToolRepairRecord.Note(childComplexity), true
+
+	case "ToolRepairRecord.rawMaterial":
+		if e.complexity.ToolRepairRecord.RawMaterial == nil {
+			break
+		}
+
+		return e.complexity.ToolRepairRecord.RawMaterial(childComplexity), true
 
 	case "ToolRepairRecord.repairDescription":
 		if e.complexity.ToolRepairRecord.RepairDescription == nil {
@@ -2634,8 +2636,8 @@ func (ec *executionContext) fieldContext_Mutation_createToolRepairRecord(ctx con
 				return ec.fieldContext_ToolRepairRecord_malfunctionDescription(ctx, field)
 			case "deadlineDate":
 				return ec.fieldContext_ToolRepairRecord_deadlineDate(ctx, field)
-			case "material":
-				return ec.fieldContext_ToolRepairRecord_material(ctx, field)
+			case "rawMaterial":
+				return ec.fieldContext_ToolRepairRecord_rawMaterial(ctx, field)
 			case "timeSpent":
 				return ec.fieldContext_ToolRepairRecord_timeSpent(ctx, field)
 			case "externalServices":
@@ -3602,8 +3604,8 @@ func (ec *executionContext) fieldContext_Query_toolRepairRecords(_ context.Conte
 				return ec.fieldContext_ToolRepairRecord_malfunctionDescription(ctx, field)
 			case "deadlineDate":
 				return ec.fieldContext_ToolRepairRecord_deadlineDate(ctx, field)
-			case "material":
-				return ec.fieldContext_ToolRepairRecord_material(ctx, field)
+			case "rawMaterial":
+				return ec.fieldContext_ToolRepairRecord_rawMaterial(ctx, field)
 			case "timeSpent":
 				return ec.fieldContext_ToolRepairRecord_timeSpent(ctx, field)
 			case "externalServices":
@@ -3669,8 +3671,8 @@ func (ec *executionContext) fieldContext_Query_toolRepairRecord(ctx context.Cont
 				return ec.fieldContext_ToolRepairRecord_malfunctionDescription(ctx, field)
 			case "deadlineDate":
 				return ec.fieldContext_ToolRepairRecord_deadlineDate(ctx, field)
-			case "material":
-				return ec.fieldContext_ToolRepairRecord_material(ctx, field)
+			case "rawMaterial":
+				return ec.fieldContext_ToolRepairRecord_rawMaterial(ctx, field)
 			case "timeSpent":
 				return ec.fieldContext_ToolRepairRecord_timeSpent(ctx, field)
 			case "externalServices":
@@ -5176,8 +5178,8 @@ func (ec *executionContext) fieldContext_Tool_toolRepairRecords(_ context.Contex
 				return ec.fieldContext_ToolRepairRecord_malfunctionDescription(ctx, field)
 			case "deadlineDate":
 				return ec.fieldContext_ToolRepairRecord_deadlineDate(ctx, field)
-			case "material":
-				return ec.fieldContext_ToolRepairRecord_material(ctx, field)
+			case "rawMaterial":
+				return ec.fieldContext_ToolRepairRecord_rawMaterial(ctx, field)
 			case "timeSpent":
 				return ec.fieldContext_ToolRepairRecord_timeSpent(ctx, field)
 			case "externalServices":
@@ -5444,8 +5446,8 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_deadlineDate(_ context
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_material(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ToolRepairRecord_material(ctx, field)
+func (ec *executionContext) _ToolRepairRecord_rawMaterial(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ToolRepairRecord_rawMaterial(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -5458,7 +5460,7 @@ func (ec *executionContext) _ToolRepairRecord_material(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Material, nil
+		return ec.resolvers.ToolRepairRecord().RawMaterial(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5467,19 +5469,29 @@ func (ec *executionContext) _ToolRepairRecord_material(ctx context.Context, fiel
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*models.RawMaterial)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterial(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ToolRepairRecord_material(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ToolRepairRecord_rawMaterial(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ToolRepairRecord",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_RawMaterial_id(ctx, field)
+			case "code":
+				return ec.fieldContext_RawMaterial_code(ctx, field)
+			case "name":
+				return ec.fieldContext_RawMaterial_name(ctx, field)
+			case "number":
+				return ec.fieldContext_RawMaterial_number(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type RawMaterial", field.Name)
 		},
 	}
 	return fc, nil
@@ -8185,7 +8197,7 @@ func (ec *executionContext) unmarshalInputCreateToolRepairRecordInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"dateStarted", "dateEnded", "repairDescription", "malfunctionDescription", "deadlineDate", "material", "timeSpent", "externalServices", "note", "user"}
+	fieldsInOrder := [...]string{"dateStarted", "dateEnded", "repairDescription", "malfunctionDescription", "deadlineDate", "timeSpent", "externalServices", "note", "user", "tool", "material"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -8227,16 +8239,9 @@ func (ec *executionContext) unmarshalInputCreateToolRepairRecordInput(ctx contex
 				return it, err
 			}
 			it.DeadlineDate = data
-		case "material":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("material"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Material = data
 		case "timeSpent":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("timeSpent"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8262,6 +8267,20 @@ func (ec *executionContext) unmarshalInputCreateToolRepairRecordInput(ctx contex
 				return it, err
 			}
 			it.User = data
+		case "tool":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tool"))
+			data, err := ec.unmarshalOID2ᚖuint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Tool = data
+		case "material":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("material"))
+			data, err := ec.unmarshalOID2ᚖuint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Material = data
 		}
 	}
 
@@ -9538,8 +9557,39 @@ func (ec *executionContext) _ToolRepairRecord(ctx context.Context, sel ast.Selec
 			out.Values[i] = ec._ToolRepairRecord_malfunctionDescription(ctx, field, obj)
 		case "deadlineDate":
 			out.Values[i] = ec._ToolRepairRecord_deadlineDate(ctx, field, obj)
-		case "material":
-			out.Values[i] = ec._ToolRepairRecord_material(ctx, field, obj)
+		case "rawMaterial":
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ToolRepairRecord_rawMaterial(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "timeSpent":
 			out.Values[i] = ec._ToolRepairRecord_timeSpent(ctx, field, obj)
 		case "externalServices":
@@ -10572,6 +10622,22 @@ func (ec *executionContext) unmarshalOInt2int(ctx context.Context, v interface{}
 
 func (ec *executionContext) marshalOInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
 	res := graphql.MarshalInt(v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalInt(*v)
 	return res
 }
 

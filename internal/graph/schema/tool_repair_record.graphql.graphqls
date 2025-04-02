@@ -18,7 +18,7 @@ type ToolRepairRecord {
     repairDescription: String
     malfunctionDescription: String
     deadlineDate: Time
-    material: String
+    rawMaterial: RawMaterial 
     timeSpent: Int 
     externalServices: String
     note: String
@@ -32,9 +32,10 @@ input CreateToolRepairRecordInput {
     repairDescription: String
     malfunctionDescription: String
     deadlineDate: Time
-    material: String
-    timeSpent: String
+    timeSpent: Int
     externalServices: String
     note: String
     user: ID
+    tool: ID
+    material: ID
 }
