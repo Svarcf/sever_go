@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/Svarcf/sever_go/internal/graph/model"
@@ -13,17 +14,19 @@ import (
 )
 
 // CreateToolRepairRecord is the resolver for the createToolRepairRecord field.
-func (r *mutationResolver) CreateToolRepairRecord(ctx context.Context, createToolRepairRecordInput *model.CreateToolRepairRecordInput) (*models.ToolRepairRecord, error) {
+func (r *mutationResolver) CreateToolRepairRecord(ctx context.Context, createToolRepairRecordInput *model.CreateToolRepairRecordInput) (*models.ToolRepairRecordDTO, error) {
+	println("CreateToolRepairRecord called with input:", createToolRepairRecordInput)
 	// Validate required fields
 	if createToolRepairRecordInput.Tool == nil {
 		return nil, fmt.Errorf("tool is required")
 	}
 	toolID := *createToolRepairRecordInput.Tool
 
-	if createToolRepairRecordInput.User == nil {
-		return nil, fmt.Errorf("user is required")
-	}
-	userID := *createToolRepairRecordInput.User
+	//TODO: Uncomment and implement user validation after authentication is done
+	// if createToolRepairRecordInput.User == nil {
+	//	return nil, fmt.Errorf("user is required")
+	//}
+	userID := uint(1)
 
 	// For string pointers, use empty string if nil
 	repairDescription := ""
@@ -63,7 +66,9 @@ func (r *mutationResolver) CreateToolRepairRecord(ctx context.Context, createToo
 	}
 
 	if createToolRepairRecordInput.DateEnded != nil {
-		toolRepairRecord.DateEnded = *createToolRepairRecordInput.DateEnded
+		toolRepairRecord.DateEnded = sql.NullTime{Time: *createToolRepairRecordInput.DateEnded, Valid: true}
+	} else {
+		toolRepairRecord.DateEnded = sql.NullTime{Valid: false}
 	}
 
 	if createToolRepairRecordInput.DeadlineDate != nil {
@@ -74,27 +79,27 @@ func (r *mutationResolver) CreateToolRepairRecord(ctx context.Context, createToo
 }
 
 // ToolRepairRecords is the resolver for the toolRepairRecords field.
-func (r *queryResolver) ToolRepairRecords(ctx context.Context) ([]*models.ToolRepairRecord, error) {
+func (r *queryResolver) ToolRepairRecords(ctx context.Context) ([]*models.ToolRepairRecordDTO, error) {
 	return r.ToolRepairRecordService.GetToolRepairRecords()
 }
 
 // ToolRepairRecord is the resolver for the toolRepairRecord field.
-func (r *queryResolver) ToolRepairRecord(ctx context.Context, id uint) (*models.ToolRepairRecord, error) {
+func (r *queryResolver) ToolRepairRecord(ctx context.Context, id uint) (*models.ToolRepairRecordDTO, error) {
 	return r.ToolRepairRecordService.GetToolRepairRecordById(id)
 }
 
 // RawMaterial is the resolver for the rawMaterial field.
-func (r *toolRepairRecordResolver) RawMaterial(ctx context.Context, obj *models.ToolRepairRecord) (*models.RawMaterial, error) {
+func (r *toolRepairRecordResolver) RawMaterial(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.RawMaterial, error) {
 	return r.RawMaterialService.GetRawMaterialById(obj.MaterialID)
 }
 
 // Tool is the resolver for the tool field.
-func (r *toolRepairRecordResolver) Tool(ctx context.Context, obj *models.ToolRepairRecord) (*models.Tool, error) {
+func (r *toolRepairRecordResolver) Tool(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.Tool, error) {
 	return r.ToolService.GetToolById(obj.ToolID)
 }
 
 // User is the resolver for the user field.
-func (r *toolRepairRecordResolver) User(ctx context.Context, obj *models.ToolRepairRecord) (*models.User, error) {
+func (r *toolRepairRecordResolver) User(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.User, error) {
 	return r.UserService.GetUserById(obj.UserID)
 }
 

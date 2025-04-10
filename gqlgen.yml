@@ -115,6 +115,8 @@ models:
       toolRepairRecords:
         resolver: true
   ToolRepairRecord:
+    model:
+      - github.com/Svarcf/sever_go/internal/models.ToolRepairRecordDTO
     fields:
       tool:
         resolver: true

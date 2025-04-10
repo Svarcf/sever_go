@@ -1,6 +1,7 @@
 package common
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -183,7 +184,7 @@ func seedDatabase(db *gorm.DB) {
 
 		repairRecord := models.ToolRepairRecord{
 			DateStarted:            repairSeed.DateStarted,
-			DateEnded:              repairSeed.DateEnded,
+			DateEnded:              sql.NullTime{Time: repairSeed.DateEnded, Valid: true},
 			RepairDescription:      repairSeed.RepairDescription,
 			MalfunctionDescription: repairSeed.MalfunctionDescription,
 			DeadlineDate:           repairSeed.DeadlineDate,

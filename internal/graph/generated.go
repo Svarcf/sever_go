@@ -184,7 +184,7 @@ type MutationResolver interface {
 	CreateStandardPart(ctx context.Context, createStandardPartInput *model.CreateStandardPartInput) (*models.StandardPart, error)
 	UpdateStandardPart(ctx context.Context, updateStandardPartInput *model.UpdateStandardPartInput) (*models.StandardPart, error)
 	CreateTool(ctx context.Context, createToolInput *model.CreateToolInput) (*models.Tool, error)
-	CreateToolRepairRecord(ctx context.Context, createToolRepairRecordInput *model.CreateToolRepairRecordInput) (*models.ToolRepairRecord, error)
+	CreateToolRepairRecord(ctx context.Context, createToolRepairRecordInput *model.CreateToolRepairRecordInput) (*models.ToolRepairRecordDTO, error)
 	CreateToolType(ctx context.Context, createToolTypeInput *model.CreateToolTypeInput) (*models.ToolType, error)
 	UpdateToolType(ctx context.Context, updateToolTypeInput *model.UpdateToolTypeInput) (*models.ToolType, error)
 	CreateUser(ctx context.Context, createUserInput *model.CreateUserInput) (*models.User, error)
@@ -202,8 +202,8 @@ type QueryResolver interface {
 	StandardPart(ctx context.Context, id uint) (*models.StandardPart, error)
 	Tools(ctx context.Context) ([]*models.Tool, error)
 	Tool(ctx context.Context, code string) (*models.Tool, error)
-	ToolRepairRecords(ctx context.Context) ([]*models.ToolRepairRecord, error)
-	ToolRepairRecord(ctx context.Context, id uint) (*models.ToolRepairRecord, error)
+	ToolRepairRecords(ctx context.Context) ([]*models.ToolRepairRecordDTO, error)
+	ToolRepairRecord(ctx context.Context, id uint) (*models.ToolRepairRecordDTO, error)
 	ToolTypes(ctx context.Context) ([]*models.ToolType, error)
 	ToolType(ctx context.Context, code string) (*models.ToolType, error)
 	Users(ctx context.Context) ([]*models.User, error)
@@ -218,13 +218,13 @@ type ToolResolver interface {
 	RawMaterials(ctx context.Context, obj *models.Tool) ([]*models.RawMaterial, error)
 	StandardParts(ctx context.Context, obj *models.Tool) ([]*models.StandardPart, error)
 	MechanicalPresses(ctx context.Context, obj *models.Tool) ([]*models.MechanicalPress, error)
-	ToolRepairRecords(ctx context.Context, obj *models.Tool) ([]*models.ToolRepairRecord, error)
+	ToolRepairRecords(ctx context.Context, obj *models.Tool) ([]*models.ToolRepairRecordDTO, error)
 }
 type ToolRepairRecordResolver interface {
-	RawMaterial(ctx context.Context, obj *models.ToolRepairRecord) (*models.RawMaterial, error)
+	RawMaterial(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.RawMaterial, error)
 
-	Tool(ctx context.Context, obj *models.ToolRepairRecord) (*models.Tool, error)
-	User(ctx context.Context, obj *models.ToolRepairRecord) (*models.User, error)
+	Tool(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.Tool, error)
+	User(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.User, error)
 }
 type UserResolver interface {
 	Role(ctx context.Context, obj *models.User) (*models.Role, error)
@@ -2611,9 +2611,9 @@ func (ec *executionContext) _Mutation_createToolRepairRecord(ctx context.Context
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.ToolRepairRecord)
+	res := resTmp.(*models.ToolRepairRecordDTO)
 	fc.Result = res
-	return ec.marshalOToolRepairRecord2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx, field.Selections, res)
+	return ec.marshalOToolRepairRecord2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecordDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createToolRepairRecord(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3579,9 +3579,9 @@ func (ec *executionContext) _Query_toolRepairRecords(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.ToolRepairRecord)
+	res := resTmp.([]*models.ToolRepairRecordDTO)
 	fc.Result = res
-	return ec.marshalOToolRepairRecord2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx, field.Selections, res)
+	return ec.marshalOToolRepairRecord2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecordDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_toolRepairRecords(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3646,9 +3646,9 @@ func (ec *executionContext) _Query_toolRepairRecord(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.ToolRepairRecord)
+	res := resTmp.(*models.ToolRepairRecordDTO)
 	fc.Result = res
-	return ec.marshalOToolRepairRecord2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx, field.Selections, res)
+	return ec.marshalOToolRepairRecord2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecordDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_toolRepairRecord(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5153,9 +5153,9 @@ func (ec *executionContext) _Tool_toolRepairRecords(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.ToolRepairRecord)
+	res := resTmp.([]*models.ToolRepairRecordDTO)
 	fc.Result = res
-	return ec.marshalOToolRepairRecord2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx, field.Selections, res)
+	return ec.marshalOToolRepairRecord2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecordDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Tool_toolRepairRecords(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5197,7 +5197,7 @@ func (ec *executionContext) fieldContext_Tool_toolRepairRecords(_ context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_id(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_id(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5241,7 +5241,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_id(_ context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_dateStarted(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_dateStarted(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_dateStarted(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5282,7 +5282,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_dateStarted(_ context.
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_dateEnded(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_dateEnded(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_dateEnded(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5305,9 +5305,9 @@ func (ec *executionContext) _ToolRepairRecord_dateEnded(ctx context.Context, fie
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(time.Time)
+	res := resTmp.(*time.Time)
 	fc.Result = res
-	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ToolRepairRecord_dateEnded(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5323,7 +5323,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_dateEnded(_ context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_repairDescription(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_repairDescription(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_repairDescription(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5364,7 +5364,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_repairDescription(_ co
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_malfunctionDescription(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_malfunctionDescription(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_malfunctionDescription(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5405,7 +5405,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_malfunctionDescription
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_deadlineDate(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_deadlineDate(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_deadlineDate(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5446,7 +5446,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_deadlineDate(_ context
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_rawMaterial(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_rawMaterial(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_rawMaterial(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5497,7 +5497,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_rawMaterial(_ context.
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_timeSpent(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_timeSpent(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_timeSpent(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5538,7 +5538,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_timeSpent(_ context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_externalServices(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_externalServices(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_externalServices(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5579,7 +5579,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_externalServices(_ con
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_note(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_note(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_note(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5620,7 +5620,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_note(_ context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_tool(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_tool(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_tool(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5689,7 +5689,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_tool(_ context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolRepairRecord_user(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecord) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolRepairRecord_user(ctx context.Context, field graphql.CollectedField, obj *models.ToolRepairRecordDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolRepairRecord_user(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -9533,7 +9533,7 @@ func (ec *executionContext) _Tool(ctx context.Context, sel ast.SelectionSet, obj
 
 var toolRepairRecordImplementors = []string{"ToolRepairRecord"}
 
-func (ec *executionContext) _ToolRepairRecord(ctx context.Context, sel ast.SelectionSet, obj *models.ToolRepairRecord) graphql.Marshaler {
+func (ec *executionContext) _ToolRepairRecord(ctx context.Context, sel ast.SelectionSet, obj *models.ToolRepairRecordDTO) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, toolRepairRecordImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -10978,7 +10978,7 @@ func (ec *executionContext) marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋi
 	return ec._Tool(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOToolRepairRecord2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx context.Context, sel ast.SelectionSet, v []*models.ToolRepairRecord) graphql.Marshaler {
+func (ec *executionContext) marshalOToolRepairRecord2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecordDTO(ctx context.Context, sel ast.SelectionSet, v []*models.ToolRepairRecordDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -11005,7 +11005,7 @@ func (ec *executionContext) marshalOToolRepairRecord2ᚕᚖgithubᚗcomᚋSvarcf
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOToolRepairRecord2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx, sel, v[i])
+			ret[i] = ec.marshalOToolRepairRecord2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecordDTO(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -11019,7 +11019,7 @@ func (ec *executionContext) marshalOToolRepairRecord2ᚕᚖgithubᚗcomᚋSvarcf
 	return ret
 }
 
-func (ec *executionContext) marshalOToolRepairRecord2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecord(ctx context.Context, sel ast.SelectionSet, v *models.ToolRepairRecord) graphql.Marshaler {
+func (ec *executionContext) marshalOToolRepairRecord2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolRepairRecordDTO(ctx context.Context, sel ast.SelectionSet, v *models.ToolRepairRecordDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

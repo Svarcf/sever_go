@@ -75,7 +75,7 @@ func (r *toolResolver) MechanicalPresses(ctx context.Context, obj *models.Tool) 
 }
 
 // ToolRepairRecords is the resolver for the toolRepairRecords field.
-func (r *toolResolver) ToolRepairRecords(ctx context.Context, obj *models.Tool) ([]*models.ToolRepairRecord, error) {
+func (r *toolResolver) ToolRepairRecords(ctx context.Context, obj *models.Tool) ([]*models.ToolRepairRecordDTO, error) {
 	return r.ToolService.GetToolRepairRecords(obj)
 }
 

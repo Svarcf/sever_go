@@ -75,11 +75,15 @@ func (s *ToolService) GetMechanicalPresses(tool *models.Tool) ([]*models.Mechani
 	return mechanicalPresses, nil
 }
 
-func (s *ToolService) GetToolRepairRecords(tool *models.Tool) ([]*models.ToolRepairRecord, error) {
+func (s *ToolService) GetToolRepairRecords(tool *models.Tool) ([]*models.ToolRepairRecordDTO, error) {
 	var toolRepairRecords []*models.ToolRepairRecord
 	err := s.DB.Model(tool).Association("ToolRepairRecords").Find(&toolRepairRecords)
 	if err != nil {
 		return nil, err
 	}
-	return toolRepairRecords, nil
+	dtos := models.Map(toolRepairRecords, func(trr *models.ToolRepairRecord) *models.ToolRepairRecordDTO {
+		return trr.ToDto()
+	})
+
+	return dtos, nil
 }
