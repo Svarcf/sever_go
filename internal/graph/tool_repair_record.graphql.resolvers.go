@@ -15,7 +15,6 @@ import (
 
 // CreateToolRepairRecord is the resolver for the createToolRepairRecord field.
 func (r *mutationResolver) CreateToolRepairRecord(ctx context.Context, createToolRepairRecordInput *model.CreateToolRepairRecordInput) (*models.ToolRepairRecordDTO, error) {
-	println("CreateToolRepairRecord called with input:", createToolRepairRecordInput)
 	// Validate required fields
 	if createToolRepairRecordInput.Tool == nil {
 		return nil, fmt.Errorf("tool is required")
@@ -89,17 +88,17 @@ func (r *queryResolver) ToolRepairRecord(ctx context.Context, id uint) (*models.
 }
 
 // RawMaterial is the resolver for the rawMaterial field.
-func (r *toolRepairRecordResolver) RawMaterial(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.RawMaterial, error) {
+func (r *toolRepairRecordResolver) RawMaterial(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.RawMaterialDTO, error) {
 	return r.RawMaterialService.GetRawMaterialById(obj.MaterialID)
 }
 
 // Tool is the resolver for the tool field.
-func (r *toolRepairRecordResolver) Tool(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.Tool, error) {
+func (r *toolRepairRecordResolver) Tool(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.ToolDTO, error) {
 	return r.ToolService.GetToolById(obj.ToolID)
 }
 
 // User is the resolver for the user field.
-func (r *toolRepairRecordResolver) User(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.User, error) {
+func (r *toolRepairRecordResolver) User(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.UserDTO, error) {
 	return r.UserService.GetUserById(obj.UserID)
 }
 

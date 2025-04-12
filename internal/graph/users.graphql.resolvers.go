@@ -13,28 +13,28 @@ import (
 )
 
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, createUserInput *model.CreateUserInput) (*models.User, error) {
+func (r *mutationResolver) CreateUser(ctx context.Context, createUserInput *model.CreateUserInput) (*models.UserDTO, error) {
 	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
 }
 
 // Users is the resolver for the users field.
-func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
+func (r *queryResolver) Users(ctx context.Context) ([]*models.UserDTO, error) {
 	return r.UserService.GetUsers()
 }
 
 // User is the resolver for the user field.
-func (r *queryResolver) User(ctx context.Context, id uint) (*models.User, error) {
+func (r *queryResolver) User(ctx context.Context, id uint) (*models.UserDTO, error) {
 	return r.UserService.GetUserById(id)
 }
 
 // UserCreated is the resolver for the userCreated field.
-func (r *subscriptionResolver) UserCreated(ctx context.Context) (<-chan *models.User, error) {
+func (r *subscriptionResolver) UserCreated(ctx context.Context) (<-chan *models.UserDTO, error) {
 	panic(fmt.Errorf("not implemented: UserCreated - userCreated"))
 }
 
 // Role is the resolver for the role field.
-func (r *userResolver) Role(ctx context.Context, obj *models.User) (*models.Role, error) {
-	return r.RoleService.GetRoleByID(obj.RoleID)
+func (r *userResolver) Role(ctx context.Context, obj *models.UserDTO) (*models.RoleDTO, error) {
+	return r.RoleService.GetRoleByID(obj.Role.Id)
 }
 
 // Subscription returns SubscriptionResolver implementation.

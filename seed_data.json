@@ -30,8 +30,8 @@
     {"name": "Washer", "code": "SP-003", "number": 600}
   ],
   "tool_types": [
-    {"name": "Hand Tool", "code": "TT-001"},
-    {"name": "Cutting Tool", "code": "TT-002"}
+    {"name": "Hand Tooltypes", "code": "TT-001"},
+    {"name": "Cutting Tooltypes", "code": "TT-002"}
   ],
   "tools": [
         {
@@ -41,7 +41,7 @@
       "note": "Used for hammering",
       "tool_stroke": "50 strokes/min",
       "workpiece_description": "Metal Workpiece",
-      "tool_type_name": "Hand Tool",
+      "tool_type_name": "Hand Tooltypes",
       "tool_association_name": "",
       "raw_material_names": ["Steel", "Copper"],
       "standard_part_names": ["Bolt"],
@@ -54,7 +54,7 @@
       "note": "Used for cutting",
       "tool_stroke": "100 strokes/min",
       "workpiece_description": "Plastic Workpiece",
-      "tool_type_name": "Cutting Tool",
+      "tool_type_name": "Cutting Tooltypes",
       "tool_association_name": "",
       "raw_material_names": ["Aluminum"],
       "standard_part_names": ["Nut"],
@@ -67,7 +67,7 @@
       "note": "Used for pressing", 
       "tool_stroke": "70 strokes/min", 
       "workpiece_description": "Steel Workpiece", 
-      "tool_type_name": "Hand Tool", 
+      "tool_type_name": "Hand Tooltypes", 
       "tool_association_name": "Hammer Tool"
     }
   ],

@@ -13,7 +13,7 @@ import (
 )
 
 // CreateRawMaterial is the resolver for the createRawMaterial field.
-func (r *mutationResolver) CreateRawMaterial(ctx context.Context, createRawMaterialInput *model.CreateRawMaterialInput) (*models.RawMaterial, error) {
+func (r *mutationResolver) CreateRawMaterial(ctx context.Context, createRawMaterialInput *model.CreateRawMaterialInput) (*models.RawMaterialDTO, error) {
 	rawMaterial := models.NewRawMaterial(
 		createRawMaterialInput.Code,
 		createRawMaterialInput.Name,
@@ -22,16 +22,16 @@ func (r *mutationResolver) CreateRawMaterial(ctx context.Context, createRawMater
 }
 
 // UpdateRawMaterial is the resolver for the updateRawMaterial field.
-func (r *mutationResolver) UpdateRawMaterial(ctx context.Context, updateRawMaterialInput *model.UpdateRawMaterialInput) (*models.RawMaterial, error) {
+func (r *mutationResolver) UpdateRawMaterial(ctx context.Context, updateRawMaterialInput *model.UpdateRawMaterialInput) (*models.RawMaterialDTO, error) {
 	panic(fmt.Errorf("not implemented: UpdateRawMaterial - updateRawMaterial"))
 }
 
 // RawMaterials is the resolver for the rawMaterials field.
-func (r *queryResolver) RawMaterials(ctx context.Context) ([]*models.RawMaterial, error) {
+func (r *queryResolver) RawMaterials(ctx context.Context) ([]*models.RawMaterialDTO, error) {
 	return r.RawMaterialService.GetRawMaterials()
 }
 
 // RawMaterial is the resolver for the rawMaterial field.
-func (r *queryResolver) RawMaterial(ctx context.Context, id uint) (*models.RawMaterial, error) {
+func (r *queryResolver) RawMaterial(ctx context.Context, id uint) (*models.RawMaterialDTO, error) {
 	return r.RawMaterialService.GetRawMaterialById(id)
 }

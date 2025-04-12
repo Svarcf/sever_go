@@ -13,20 +13,23 @@ func NewUserService(db *gorm.DB) *UserService {
 	return &UserService{DB: db}
 }
 
-func (s *UserService) GetUserById(id uint) (*models.User, error) {
+func (s *UserService) GetUserById(id uint) (*models.UserDTO, error) {
 	var user *models.User
 	err := s.DB.First(&user, id).Error
 	if err != nil {
 		return nil, err
 	}
-	return user, nil
+	return user.ToDTO(), nil
 }
 
-func (s *UserService) GetUsers() ([]*models.User, error) {
+func (s *UserService) GetUsers() ([]*models.UserDTO, error) {
 	var users []*models.User
 	err := s.DB.Find(&users).Error
 	if err != nil {
 		return nil, err
 	}
-	return users, nil
+	dtos := models.Map(users, func(user *models.User) *models.UserDTO {
+		return user.ToDTO()
+	})
+	return dtos, nil
 }

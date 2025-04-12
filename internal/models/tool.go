@@ -27,6 +27,7 @@ type ToolDTO struct {
 	ToolStroke           string                 `json:"tool_stroke"`
 	WorkpieceDescription string                 `json:"workpiece_description"`
 	ToolType             *ToolTypeDTO           `json:"tool_type"`
+	ToolTypeID           uint                   `json:"tool_type_id"`
 	ToolAssociation      *ToolDTO               `json:"tool_association"`
 	ToolRepairRecords    []*ToolRepairRecordDTO `json:"tool_repair_records"`
 	RawMaterials         []*RawMaterialDTO      `json:"raw_materials"`
@@ -62,6 +63,7 @@ func (t *Tool) ToDTO() *ToolDTO {
 		ToolStroke:           t.ToolStroke,
 		WorkpieceDescription: t.WorkpieceDescription,
 		ToolType:             toolTypeDTO,
+		ToolTypeID:           t.ToolTypeID,
 		ToolAssociation:      toolAssociationDTO,
 		ToolRepairRecords:    toolRepairRecordsDTO,
 		RawMaterials:         rawMaterialsDTO,

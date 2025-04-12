@@ -47,6 +47,7 @@ type ResolverRoot interface {
 	Subscription() SubscriptionResolver
 	Tool() ToolResolver
 	ToolRepairRecord() ToolRepairRecordResolver
+	ToolType() ToolTypeResolver
 	User() UserResolver
 }
 
@@ -175,59 +176,62 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreateFile(ctx context.Context, createFileInput *model.CreateFileInput) (*models.File, error)
-	CreateMechanicalPress(ctx context.Context, createMechanicalPressInput *model.CreateMechanicalPressInput) (*models.MechanicalPress, error)
-	UpdateMechanicalPress(ctx context.Context, updateMechanicalPressInput *model.UpdateMechanicalPressInput) (*models.MechanicalPress, error)
-	CreateRawMaterial(ctx context.Context, createRawMaterialInput *model.CreateRawMaterialInput) (*models.RawMaterial, error)
-	UpdateRawMaterial(ctx context.Context, updateRawMaterialInput *model.UpdateRawMaterialInput) (*models.RawMaterial, error)
-	CreateRole(ctx context.Context, createRoleInput *model.CreateRoleInput) (*models.Role, error)
-	CreateStandardPart(ctx context.Context, createStandardPartInput *model.CreateStandardPartInput) (*models.StandardPart, error)
-	UpdateStandardPart(ctx context.Context, updateStandardPartInput *model.UpdateStandardPartInput) (*models.StandardPart, error)
-	CreateTool(ctx context.Context, createToolInput *model.CreateToolInput) (*models.Tool, error)
+	CreateFile(ctx context.Context, createFileInput *model.CreateFileInput) (*models.FileDTO, error)
+	CreateMechanicalPress(ctx context.Context, createMechanicalPressInput *model.CreateMechanicalPressInput) (*models.MechanicalPressDTO, error)
+	UpdateMechanicalPress(ctx context.Context, updateMechanicalPressInput *model.UpdateMechanicalPressInput) (*models.MechanicalPressDTO, error)
+	CreateRawMaterial(ctx context.Context, createRawMaterialInput *model.CreateRawMaterialInput) (*models.RawMaterialDTO, error)
+	UpdateRawMaterial(ctx context.Context, updateRawMaterialInput *model.UpdateRawMaterialInput) (*models.RawMaterialDTO, error)
+	CreateRole(ctx context.Context, createRoleInput *model.CreateRoleInput) (*models.RoleDTO, error)
+	CreateStandardPart(ctx context.Context, createStandardPartInput *model.CreateStandardPartInput) (*models.StandardPartDTO, error)
+	UpdateStandardPart(ctx context.Context, updateStandardPartInput *model.UpdateStandardPartInput) (*models.StandardPartDTO, error)
+	CreateTool(ctx context.Context, createToolInput *model.CreateToolInput) (*models.ToolDTO, error)
 	CreateToolRepairRecord(ctx context.Context, createToolRepairRecordInput *model.CreateToolRepairRecordInput) (*models.ToolRepairRecordDTO, error)
-	CreateToolType(ctx context.Context, createToolTypeInput *model.CreateToolTypeInput) (*models.ToolType, error)
-	UpdateToolType(ctx context.Context, updateToolTypeInput *model.UpdateToolTypeInput) (*models.ToolType, error)
-	CreateUser(ctx context.Context, createUserInput *model.CreateUserInput) (*models.User, error)
+	CreateToolType(ctx context.Context, createToolTypeInput *model.CreateToolTypeInput) (*models.ToolTypeDTO, error)
+	UpdateToolType(ctx context.Context, updateToolTypeInput *model.UpdateToolTypeInput) (*models.ToolTypeDTO, error)
+	CreateUser(ctx context.Context, createUserInput *model.CreateUserInput) (*models.UserDTO, error)
 }
 type QueryResolver interface {
-	Files(ctx context.Context) ([]*models.File, error)
-	File(ctx context.Context, id uint) (*models.File, error)
-	MechanicalPresses(ctx context.Context) ([]*models.MechanicalPress, error)
-	MechanicalPress(ctx context.Context, id uint) (*models.MechanicalPress, error)
-	RawMaterials(ctx context.Context) ([]*models.RawMaterial, error)
-	RawMaterial(ctx context.Context, id uint) (*models.RawMaterial, error)
-	Roles(ctx context.Context) ([]*models.Role, error)
-	Role(ctx context.Context, id uint) (*models.Role, error)
-	StandardParts(ctx context.Context) ([]*models.StandardPart, error)
-	StandardPart(ctx context.Context, id uint) (*models.StandardPart, error)
-	Tools(ctx context.Context) ([]*models.Tool, error)
-	Tool(ctx context.Context, code string) (*models.Tool, error)
+	Files(ctx context.Context) ([]*models.FileDTO, error)
+	File(ctx context.Context, id uint) (*models.FileDTO, error)
+	MechanicalPresses(ctx context.Context) ([]*models.MechanicalPressDTO, error)
+	MechanicalPress(ctx context.Context, id uint) (*models.MechanicalPressDTO, error)
+	RawMaterials(ctx context.Context) ([]*models.RawMaterialDTO, error)
+	RawMaterial(ctx context.Context, id uint) (*models.RawMaterialDTO, error)
+	Roles(ctx context.Context) ([]*models.RoleDTO, error)
+	Role(ctx context.Context, id uint) (*models.RoleDTO, error)
+	StandardParts(ctx context.Context) ([]*models.StandardPartDTO, error)
+	StandardPart(ctx context.Context, id uint) (*models.StandardPartDTO, error)
+	Tools(ctx context.Context) ([]*models.ToolDTO, error)
+	Tool(ctx context.Context, code string) (*models.ToolDTO, error)
 	ToolRepairRecords(ctx context.Context) ([]*models.ToolRepairRecordDTO, error)
 	ToolRepairRecord(ctx context.Context, id uint) (*models.ToolRepairRecordDTO, error)
-	ToolTypes(ctx context.Context) ([]*models.ToolType, error)
-	ToolType(ctx context.Context, code string) (*models.ToolType, error)
-	Users(ctx context.Context) ([]*models.User, error)
-	User(ctx context.Context, id uint) (*models.User, error)
+	ToolTypes(ctx context.Context) ([]*models.ToolTypeDTO, error)
+	ToolType(ctx context.Context, code string) (*models.ToolTypeDTO, error)
+	Users(ctx context.Context) ([]*models.UserDTO, error)
+	User(ctx context.Context, id uint) (*models.UserDTO, error)
 }
 type SubscriptionResolver interface {
-	UserCreated(ctx context.Context) (<-chan *models.User, error)
+	UserCreated(ctx context.Context) (<-chan *models.UserDTO, error)
 }
 type ToolResolver interface {
-	ToolType(ctx context.Context, obj *models.Tool) (*models.ToolType, error)
+	ToolType(ctx context.Context, obj *models.ToolDTO) (*models.ToolTypeDTO, error)
 
-	RawMaterials(ctx context.Context, obj *models.Tool) ([]*models.RawMaterial, error)
-	StandardParts(ctx context.Context, obj *models.Tool) ([]*models.StandardPart, error)
-	MechanicalPresses(ctx context.Context, obj *models.Tool) ([]*models.MechanicalPress, error)
-	ToolRepairRecords(ctx context.Context, obj *models.Tool) ([]*models.ToolRepairRecordDTO, error)
+	RawMaterials(ctx context.Context, obj *models.ToolDTO) ([]*models.RawMaterialDTO, error)
+	StandardParts(ctx context.Context, obj *models.ToolDTO) ([]*models.StandardPartDTO, error)
+	MechanicalPresses(ctx context.Context, obj *models.ToolDTO) ([]*models.MechanicalPressDTO, error)
+	ToolRepairRecords(ctx context.Context, obj *models.ToolDTO) ([]*models.ToolRepairRecordDTO, error)
 }
 type ToolRepairRecordResolver interface {
-	RawMaterial(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.RawMaterial, error)
+	RawMaterial(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.RawMaterialDTO, error)
 
-	Tool(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.Tool, error)
-	User(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.User, error)
+	Tool(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.ToolDTO, error)
+	User(ctx context.Context, obj *models.ToolRepairRecordDTO) (*models.UserDTO, error)
+}
+type ToolTypeResolver interface {
+	Tools(ctx context.Context, obj *models.ToolTypeDTO) ([]*models.ToolDTO, error)
 }
 type UserResolver interface {
-	Role(ctx context.Context, obj *models.User) (*models.Role, error)
+	Role(ctx context.Context, obj *models.UserDTO) (*models.RoleDTO, error)
 }
 
 type executableSchema struct {
@@ -1685,7 +1689,7 @@ func (ec *executionContext) field___Type_fields_argsIncludeDeprecated(
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _File_id(ctx context.Context, field graphql.CollectedField, obj *models.File) (ret graphql.Marshaler) {
+func (ec *executionContext) _File_id(ctx context.Context, field graphql.CollectedField, obj *models.FileDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_File_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1729,7 +1733,7 @@ func (ec *executionContext) fieldContext_File_id(_ context.Context, field graphq
 	return fc, nil
 }
 
-func (ec *executionContext) _File_name(ctx context.Context, field graphql.CollectedField, obj *models.File) (ret graphql.Marshaler) {
+func (ec *executionContext) _File_name(ctx context.Context, field graphql.CollectedField, obj *models.FileDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_File_name(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1773,7 +1777,7 @@ func (ec *executionContext) fieldContext_File_name(_ context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _File_location(ctx context.Context, field graphql.CollectedField, obj *models.File) (ret graphql.Marshaler) {
+func (ec *executionContext) _File_location(ctx context.Context, field graphql.CollectedField, obj *models.FileDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_File_location(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1817,7 +1821,7 @@ func (ec *executionContext) fieldContext_File_location(_ context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _MechanicalPress_id(ctx context.Context, field graphql.CollectedField, obj *models.MechanicalPress) (ret graphql.Marshaler) {
+func (ec *executionContext) _MechanicalPress_id(ctx context.Context, field graphql.CollectedField, obj *models.MechanicalPressDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MechanicalPress_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1861,7 +1865,7 @@ func (ec *executionContext) fieldContext_MechanicalPress_id(_ context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _MechanicalPress_name(ctx context.Context, field graphql.CollectedField, obj *models.MechanicalPress) (ret graphql.Marshaler) {
+func (ec *executionContext) _MechanicalPress_name(ctx context.Context, field graphql.CollectedField, obj *models.MechanicalPressDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MechanicalPress_name(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1905,7 +1909,7 @@ func (ec *executionContext) fieldContext_MechanicalPress_name(_ context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _MechanicalPress_code(ctx context.Context, field graphql.CollectedField, obj *models.MechanicalPress) (ret graphql.Marshaler) {
+func (ec *executionContext) _MechanicalPress_code(ctx context.Context, field graphql.CollectedField, obj *models.MechanicalPressDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MechanicalPress_code(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1949,7 +1953,7 @@ func (ec *executionContext) fieldContext_MechanicalPress_code(_ context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _MechanicalPress_tools(ctx context.Context, field graphql.CollectedField, obj *models.MechanicalPress) (ret graphql.Marshaler) {
+func (ec *executionContext) _MechanicalPress_tools(ctx context.Context, field graphql.CollectedField, obj *models.MechanicalPressDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MechanicalPress_tools(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1972,9 +1976,9 @@ func (ec *executionContext) _MechanicalPress_tools(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.Tool)
+	res := resTmp.([]*models.ToolDTO)
 	fc.Result = res
-	return ec.marshalOTool2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx, field.Selections, res)
+	return ec.marshalOTool2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MechanicalPress_tools(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2041,9 +2045,9 @@ func (ec *executionContext) _Mutation_createFile(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.File)
+	res := resTmp.(*models.FileDTO)
 	fc.Result = res
-	return ec.marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFile(ctx, field.Selections, res)
+	return ec.marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFileDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2101,9 +2105,9 @@ func (ec *executionContext) _Mutation_createMechanicalPress(ctx context.Context,
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.MechanicalPress)
+	res := resTmp.(*models.MechanicalPressDTO)
 	fc.Result = res
-	return ec.marshalOMechanicalPress2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPress(ctx, field.Selections, res)
+	return ec.marshalOMechanicalPress2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPressDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createMechanicalPress(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2163,9 +2167,9 @@ func (ec *executionContext) _Mutation_updateMechanicalPress(ctx context.Context,
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.MechanicalPress)
+	res := resTmp.(*models.MechanicalPressDTO)
 	fc.Result = res
-	return ec.marshalOMechanicalPress2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPress(ctx, field.Selections, res)
+	return ec.marshalOMechanicalPress2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPressDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateMechanicalPress(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2225,9 +2229,9 @@ func (ec *executionContext) _Mutation_createRawMaterial(ctx context.Context, fie
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.RawMaterial)
+	res := resTmp.(*models.RawMaterialDTO)
 	fc.Result = res
-	return ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterial(ctx, field.Selections, res)
+	return ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterialDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createRawMaterial(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2287,9 +2291,9 @@ func (ec *executionContext) _Mutation_updateRawMaterial(ctx context.Context, fie
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.RawMaterial)
+	res := resTmp.(*models.RawMaterialDTO)
 	fc.Result = res
-	return ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterial(ctx, field.Selections, res)
+	return ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterialDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateRawMaterial(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2349,9 +2353,9 @@ func (ec *executionContext) _Mutation_createRole(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Role)
+	res := resTmp.(*models.RoleDTO)
 	fc.Result = res
-	return ec.marshalORole2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRole(ctx, field.Selections, res)
+	return ec.marshalORole2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRoleDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createRole(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2407,9 +2411,9 @@ func (ec *executionContext) _Mutation_createStandardPart(ctx context.Context, fi
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.StandardPart)
+	res := resTmp.(*models.StandardPartDTO)
 	fc.Result = res
-	return ec.marshalOStandardPart2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPart(ctx, field.Selections, res)
+	return ec.marshalOStandardPart2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPartDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createStandardPart(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2469,9 +2473,9 @@ func (ec *executionContext) _Mutation_updateStandardPart(ctx context.Context, fi
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.StandardPart)
+	res := resTmp.(*models.StandardPartDTO)
 	fc.Result = res
-	return ec.marshalOStandardPart2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPart(ctx, field.Selections, res)
+	return ec.marshalOStandardPart2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPartDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateStandardPart(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2531,9 +2535,9 @@ func (ec *executionContext) _Mutation_createTool(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Tool)
+	res := resTmp.(*models.ToolDTO)
 	fc.Result = res
-	return ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx, field.Selections, res)
+	return ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createTool(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2689,9 +2693,9 @@ func (ec *executionContext) _Mutation_createToolType(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.ToolType)
+	res := resTmp.(*models.ToolTypeDTO)
 	fc.Result = res
-	return ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx, field.Selections, res)
+	return ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolTypeDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createToolType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2751,9 +2755,9 @@ func (ec *executionContext) _Mutation_updateToolType(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.ToolType)
+	res := resTmp.(*models.ToolTypeDTO)
 	fc.Result = res
-	return ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx, field.Selections, res)
+	return ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolTypeDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateToolType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2813,9 +2817,9 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.User)
+	res := resTmp.(*models.UserDTO)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUserDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2877,9 +2881,9 @@ func (ec *executionContext) _Query_files(ctx context.Context, field graphql.Coll
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.File)
+	res := resTmp.([]*models.FileDTO)
 	fc.Result = res
-	return ec.marshalOFile2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFile(ctx, field.Selections, res)
+	return ec.marshalOFile2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFileDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_files(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2926,9 +2930,9 @@ func (ec *executionContext) _Query_file(ctx context.Context, field graphql.Colle
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.File)
+	res := resTmp.(*models.FileDTO)
 	fc.Result = res
-	return ec.marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFile(ctx, field.Selections, res)
+	return ec.marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFileDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_file(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2986,9 +2990,9 @@ func (ec *executionContext) _Query_mechanicalPresses(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.MechanicalPress)
+	res := resTmp.([]*models.MechanicalPressDTO)
 	fc.Result = res
-	return ec.marshalOMechanicalPress2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPress(ctx, field.Selections, res)
+	return ec.marshalOMechanicalPress2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPressDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_mechanicalPresses(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3037,9 +3041,9 @@ func (ec *executionContext) _Query_mechanicalPress(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.MechanicalPress)
+	res := resTmp.(*models.MechanicalPressDTO)
 	fc.Result = res
-	return ec.marshalOMechanicalPress2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPress(ctx, field.Selections, res)
+	return ec.marshalOMechanicalPress2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPressDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_mechanicalPress(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3099,9 +3103,9 @@ func (ec *executionContext) _Query_rawMaterials(ctx context.Context, field graph
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.RawMaterial)
+	res := resTmp.([]*models.RawMaterialDTO)
 	fc.Result = res
-	return ec.marshalORawMaterial2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterial(ctx, field.Selections, res)
+	return ec.marshalORawMaterial2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterialDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_rawMaterials(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3150,9 +3154,9 @@ func (ec *executionContext) _Query_rawMaterial(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.RawMaterial)
+	res := resTmp.(*models.RawMaterialDTO)
 	fc.Result = res
-	return ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterial(ctx, field.Selections, res)
+	return ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterialDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_rawMaterial(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3212,9 +3216,9 @@ func (ec *executionContext) _Query_roles(ctx context.Context, field graphql.Coll
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.Role)
+	res := resTmp.([]*models.RoleDTO)
 	fc.Result = res
-	return ec.marshalORole2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRole(ctx, field.Selections, res)
+	return ec.marshalORole2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRoleDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_roles(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3259,9 +3263,9 @@ func (ec *executionContext) _Query_role(ctx context.Context, field graphql.Colle
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Role)
+	res := resTmp.(*models.RoleDTO)
 	fc.Result = res
-	return ec.marshalORole2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRole(ctx, field.Selections, res)
+	return ec.marshalORole2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRoleDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_role(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3317,9 +3321,9 @@ func (ec *executionContext) _Query_standardParts(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.StandardPart)
+	res := resTmp.([]*models.StandardPartDTO)
 	fc.Result = res
-	return ec.marshalOStandardPart2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPart(ctx, field.Selections, res)
+	return ec.marshalOStandardPart2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPartDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_standardParts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3368,9 +3372,9 @@ func (ec *executionContext) _Query_standardPart(ctx context.Context, field graph
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.StandardPart)
+	res := resTmp.(*models.StandardPartDTO)
 	fc.Result = res
-	return ec.marshalOStandardPart2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPart(ctx, field.Selections, res)
+	return ec.marshalOStandardPart2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPartDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_standardPart(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3430,9 +3434,9 @@ func (ec *executionContext) _Query_tools(ctx context.Context, field graphql.Coll
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.Tool)
+	res := resTmp.([]*models.ToolDTO)
 	fc.Result = res
-	return ec.marshalOTool2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx, field.Selections, res)
+	return ec.marshalOTool2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_tools(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3499,9 +3503,9 @@ func (ec *executionContext) _Query_tool(ctx context.Context, field graphql.Colle
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Tool)
+	res := resTmp.(*models.ToolDTO)
 	fc.Result = res
-	return ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx, field.Selections, res)
+	return ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_tool(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3724,9 +3728,9 @@ func (ec *executionContext) _Query_toolTypes(ctx context.Context, field graphql.
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.ToolType)
+	res := resTmp.([]*models.ToolTypeDTO)
 	fc.Result = res
-	return ec.marshalOToolType2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx, field.Selections, res)
+	return ec.marshalOToolType2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolTypeDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_toolTypes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3775,9 +3779,9 @@ func (ec *executionContext) _Query_toolType(ctx context.Context, field graphql.C
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.ToolType)
+	res := resTmp.(*models.ToolTypeDTO)
 	fc.Result = res
-	return ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx, field.Selections, res)
+	return ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolTypeDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_toolType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3837,9 +3841,9 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.User)
+	res := resTmp.([]*models.UserDTO)
 	fc.Result = res
-	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUserDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_users(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3890,9 +3894,9 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.User)
+	res := resTmp.(*models.UserDTO)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUserDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_user(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4060,7 +4064,7 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _RawMaterial_id(ctx context.Context, field graphql.CollectedField, obj *models.RawMaterial) (ret graphql.Marshaler) {
+func (ec *executionContext) _RawMaterial_id(ctx context.Context, field graphql.CollectedField, obj *models.RawMaterialDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_RawMaterial_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4104,7 +4108,7 @@ func (ec *executionContext) fieldContext_RawMaterial_id(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _RawMaterial_code(ctx context.Context, field graphql.CollectedField, obj *models.RawMaterial) (ret graphql.Marshaler) {
+func (ec *executionContext) _RawMaterial_code(ctx context.Context, field graphql.CollectedField, obj *models.RawMaterialDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_RawMaterial_code(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4148,7 +4152,7 @@ func (ec *executionContext) fieldContext_RawMaterial_code(_ context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _RawMaterial_name(ctx context.Context, field graphql.CollectedField, obj *models.RawMaterial) (ret graphql.Marshaler) {
+func (ec *executionContext) _RawMaterial_name(ctx context.Context, field graphql.CollectedField, obj *models.RawMaterialDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_RawMaterial_name(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4192,7 +4196,7 @@ func (ec *executionContext) fieldContext_RawMaterial_name(_ context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _RawMaterial_number(ctx context.Context, field graphql.CollectedField, obj *models.RawMaterial) (ret graphql.Marshaler) {
+func (ec *executionContext) _RawMaterial_number(ctx context.Context, field graphql.CollectedField, obj *models.RawMaterialDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_RawMaterial_number(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4233,7 +4237,7 @@ func (ec *executionContext) fieldContext_RawMaterial_number(_ context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Role_id(ctx context.Context, field graphql.CollectedField, obj *models.Role) (ret graphql.Marshaler) {
+func (ec *executionContext) _Role_id(ctx context.Context, field graphql.CollectedField, obj *models.RoleDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Role_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4277,7 +4281,7 @@ func (ec *executionContext) fieldContext_Role_id(_ context.Context, field graphq
 	return fc, nil
 }
 
-func (ec *executionContext) _Role_name(ctx context.Context, field graphql.CollectedField, obj *models.Role) (ret graphql.Marshaler) {
+func (ec *executionContext) _Role_name(ctx context.Context, field graphql.CollectedField, obj *models.RoleDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Role_name(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4321,7 +4325,7 @@ func (ec *executionContext) fieldContext_Role_name(_ context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _StandardPart_id(ctx context.Context, field graphql.CollectedField, obj *models.StandardPart) (ret graphql.Marshaler) {
+func (ec *executionContext) _StandardPart_id(ctx context.Context, field graphql.CollectedField, obj *models.StandardPartDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_StandardPart_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4365,7 +4369,7 @@ func (ec *executionContext) fieldContext_StandardPart_id(_ context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _StandardPart_code(ctx context.Context, field graphql.CollectedField, obj *models.StandardPart) (ret graphql.Marshaler) {
+func (ec *executionContext) _StandardPart_code(ctx context.Context, field graphql.CollectedField, obj *models.StandardPartDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_StandardPart_code(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4409,7 +4413,7 @@ func (ec *executionContext) fieldContext_StandardPart_code(_ context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _StandardPart_name(ctx context.Context, field graphql.CollectedField, obj *models.StandardPart) (ret graphql.Marshaler) {
+func (ec *executionContext) _StandardPart_name(ctx context.Context, field graphql.CollectedField, obj *models.StandardPartDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_StandardPart_name(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4453,7 +4457,7 @@ func (ec *executionContext) fieldContext_StandardPart_name(_ context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _StandardPart_number(ctx context.Context, field graphql.CollectedField, obj *models.StandardPart) (ret graphql.Marshaler) {
+func (ec *executionContext) _StandardPart_number(ctx context.Context, field graphql.CollectedField, obj *models.StandardPartDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_StandardPart_number(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4519,7 +4523,7 @@ func (ec *executionContext) _Subscription_userCreated(ctx context.Context, field
 	}
 	return func(ctx context.Context) graphql.Marshaler {
 		select {
-		case res, ok := <-resTmp.(<-chan *models.User):
+		case res, ok := <-resTmp.(<-chan *models.UserDTO):
 			if !ok {
 				return nil
 			}
@@ -4527,7 +4531,7 @@ func (ec *executionContext) _Subscription_userCreated(ctx context.Context, field
 				w.Write([]byte{'{'})
 				graphql.MarshalString(field.Alias).MarshalGQL(w)
 				w.Write([]byte{':'})
-				ec.marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUser(ctx, field.Selections, res).MarshalGQL(w)
+				ec.marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUserDTO(ctx, field.Selections, res).MarshalGQL(w)
 				w.Write([]byte{'}'})
 			})
 		case <-ctx.Done():
@@ -4561,7 +4565,7 @@ func (ec *executionContext) fieldContext_Subscription_userCreated(_ context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_id(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_id(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4605,7 +4609,7 @@ func (ec *executionContext) fieldContext_Tool_id(_ context.Context, field graphq
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_code(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_code(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_code(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4649,7 +4653,7 @@ func (ec *executionContext) fieldContext_Tool_code(_ context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_name(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_name(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_name(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4693,7 +4697,7 @@ func (ec *executionContext) fieldContext_Tool_name(_ context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_dimension(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_dimension(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_dimension(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4734,7 +4738,7 @@ func (ec *executionContext) fieldContext_Tool_dimension(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_note(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_note(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_note(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4775,7 +4779,7 @@ func (ec *executionContext) fieldContext_Tool_note(_ context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_toolStroke(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_toolStroke(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_toolStroke(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4816,7 +4820,7 @@ func (ec *executionContext) fieldContext_Tool_toolStroke(_ context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_workpieceDescription(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_workpieceDescription(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_workpieceDescription(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4857,7 +4861,7 @@ func (ec *executionContext) fieldContext_Tool_workpieceDescription(_ context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_toolType(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_toolType(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_toolType(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4880,9 +4884,9 @@ func (ec *executionContext) _Tool_toolType(ctx context.Context, field graphql.Co
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.ToolType)
+	res := resTmp.(*models.ToolTypeDTO)
 	fc.Result = res
-	return ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx, field.Selections, res)
+	return ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolTypeDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Tool_toolType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4908,7 +4912,7 @@ func (ec *executionContext) fieldContext_Tool_toolType(_ context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_toolAssociation(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_toolAssociation(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_toolAssociation(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4931,9 +4935,9 @@ func (ec *executionContext) _Tool_toolAssociation(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Tool)
+	res := resTmp.(*models.ToolDTO)
 	fc.Result = res
-	return ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx, field.Selections, res)
+	return ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Tool_toolAssociation(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4977,7 +4981,7 @@ func (ec *executionContext) fieldContext_Tool_toolAssociation(_ context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_rawMaterials(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_rawMaterials(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_rawMaterials(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5000,9 +5004,9 @@ func (ec *executionContext) _Tool_rawMaterials(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.RawMaterial)
+	res := resTmp.([]*models.RawMaterialDTO)
 	fc.Result = res
-	return ec.marshalORawMaterial2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterial(ctx, field.Selections, res)
+	return ec.marshalORawMaterial2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterialDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Tool_rawMaterials(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5028,7 +5032,7 @@ func (ec *executionContext) fieldContext_Tool_rawMaterials(_ context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_standardParts(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_standardParts(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_standardParts(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5051,9 +5055,9 @@ func (ec *executionContext) _Tool_standardParts(ctx context.Context, field graph
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.StandardPart)
+	res := resTmp.([]*models.StandardPartDTO)
 	fc.Result = res
-	return ec.marshalOStandardPart2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPart(ctx, field.Selections, res)
+	return ec.marshalOStandardPart2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPartDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Tool_standardParts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5079,7 +5083,7 @@ func (ec *executionContext) fieldContext_Tool_standardParts(_ context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_mechanicalPresses(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_mechanicalPresses(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_mechanicalPresses(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5102,9 +5106,9 @@ func (ec *executionContext) _Tool_mechanicalPresses(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.MechanicalPress)
+	res := resTmp.([]*models.MechanicalPressDTO)
 	fc.Result = res
-	return ec.marshalOMechanicalPress2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPress(ctx, field.Selections, res)
+	return ec.marshalOMechanicalPress2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPressDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Tool_mechanicalPresses(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5130,7 +5134,7 @@ func (ec *executionContext) fieldContext_Tool_mechanicalPresses(_ context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Tool_toolRepairRecords(ctx context.Context, field graphql.CollectedField, obj *models.Tool) (ret graphql.Marshaler) {
+func (ec *executionContext) _Tool_toolRepairRecords(ctx context.Context, field graphql.CollectedField, obj *models.ToolDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Tool_toolRepairRecords(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5469,9 +5473,9 @@ func (ec *executionContext) _ToolRepairRecord_rawMaterial(ctx context.Context, f
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.RawMaterial)
+	res := resTmp.(*models.RawMaterialDTO)
 	fc.Result = res
-	return ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterial(ctx, field.Selections, res)
+	return ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterialDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ToolRepairRecord_rawMaterial(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5643,9 +5647,9 @@ func (ec *executionContext) _ToolRepairRecord_tool(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Tool)
+	res := resTmp.(*models.ToolDTO)
 	fc.Result = res
-	return ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx, field.Selections, res)
+	return ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ToolRepairRecord_tool(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5712,9 +5716,9 @@ func (ec *executionContext) _ToolRepairRecord_user(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.User)
+	res := resTmp.(*models.UserDTO)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUserDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ToolRepairRecord_user(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5742,7 +5746,7 @@ func (ec *executionContext) fieldContext_ToolRepairRecord_user(_ context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolType_id(ctx context.Context, field graphql.CollectedField, obj *models.ToolType) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolType_id(ctx context.Context, field graphql.CollectedField, obj *models.ToolTypeDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolType_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5786,7 +5790,7 @@ func (ec *executionContext) fieldContext_ToolType_id(_ context.Context, field gr
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolType_code(ctx context.Context, field graphql.CollectedField, obj *models.ToolType) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolType_code(ctx context.Context, field graphql.CollectedField, obj *models.ToolTypeDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolType_code(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5830,7 +5834,7 @@ func (ec *executionContext) fieldContext_ToolType_code(_ context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolType_name(ctx context.Context, field graphql.CollectedField, obj *models.ToolType) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolType_name(ctx context.Context, field graphql.CollectedField, obj *models.ToolTypeDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolType_name(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5874,7 +5878,7 @@ func (ec *executionContext) fieldContext_ToolType_name(_ context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _ToolType_tools(ctx context.Context, field graphql.CollectedField, obj *models.ToolType) (ret graphql.Marshaler) {
+func (ec *executionContext) _ToolType_tools(ctx context.Context, field graphql.CollectedField, obj *models.ToolTypeDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ToolType_tools(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5888,7 +5892,7 @@ func (ec *executionContext) _ToolType_tools(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Tools, nil
+		return ec.resolvers.ToolType().Tools(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5897,17 +5901,17 @@ func (ec *executionContext) _ToolType_tools(ctx context.Context, field graphql.C
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]models.Tool)
+	res := resTmp.([]*models.ToolDTO)
 	fc.Result = res
-	return ec.marshalOTool2ᚕgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx, field.Selections, res)
+	return ec.marshalOTool2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ToolType_tools(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ToolType",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -5943,7 +5947,7 @@ func (ec *executionContext) fieldContext_ToolType_tools(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *models.UserDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_User_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5987,7 +5991,7 @@ func (ec *executionContext) fieldContext_User_id(_ context.Context, field graphq
 	return fc, nil
 }
 
-func (ec *executionContext) _User_userName(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_userName(ctx context.Context, field graphql.CollectedField, obj *models.UserDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_User_userName(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6028,7 +6032,7 @@ func (ec *executionContext) fieldContext_User_userName(_ context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _User_firstName(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_firstName(ctx context.Context, field graphql.CollectedField, obj *models.UserDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_User_firstName(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6069,7 +6073,7 @@ func (ec *executionContext) fieldContext_User_firstName(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _User_lastName(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_lastName(ctx context.Context, field graphql.CollectedField, obj *models.UserDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_User_lastName(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6110,7 +6114,7 @@ func (ec *executionContext) fieldContext_User_lastName(_ context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _User_role(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_role(ctx context.Context, field graphql.CollectedField, obj *models.UserDTO) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_User_role(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6133,9 +6137,9 @@ func (ec *executionContext) _User_role(ctx context.Context, field graphql.Collec
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Role)
+	res := resTmp.(*models.RoleDTO)
 	fc.Result = res
-	return ec.marshalORole2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRole(ctx, field.Selections, res)
+	return ec.marshalORole2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRoleDTO(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_role(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8557,7 +8561,7 @@ func (ec *executionContext) unmarshalInputUpdateToolTypeInput(ctx context.Contex
 
 var fileImplementors = []string{"File"}
 
-func (ec *executionContext) _File(ctx context.Context, sel ast.SelectionSet, obj *models.File) graphql.Marshaler {
+func (ec *executionContext) _File(ctx context.Context, sel ast.SelectionSet, obj *models.FileDTO) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, fileImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -8606,7 +8610,7 @@ func (ec *executionContext) _File(ctx context.Context, sel ast.SelectionSet, obj
 
 var mechanicalPressImplementors = []string{"MechanicalPress"}
 
-func (ec *executionContext) _MechanicalPress(ctx context.Context, sel ast.SelectionSet, obj *models.MechanicalPress) graphql.Marshaler {
+func (ec *executionContext) _MechanicalPress(ctx context.Context, sel ast.SelectionSet, obj *models.MechanicalPressDTO) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, mechanicalPressImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -9143,7 +9147,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 
 var rawMaterialImplementors = []string{"RawMaterial"}
 
-func (ec *executionContext) _RawMaterial(ctx context.Context, sel ast.SelectionSet, obj *models.RawMaterial) graphql.Marshaler {
+func (ec *executionContext) _RawMaterial(ctx context.Context, sel ast.SelectionSet, obj *models.RawMaterialDTO) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, rawMaterialImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -9194,7 +9198,7 @@ func (ec *executionContext) _RawMaterial(ctx context.Context, sel ast.SelectionS
 
 var roleImplementors = []string{"Role"}
 
-func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj *models.Role) graphql.Marshaler {
+func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj *models.RoleDTO) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, roleImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -9238,7 +9242,7 @@ func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj
 
 var standardPartImplementors = []string{"StandardPart"}
 
-func (ec *executionContext) _StandardPart(ctx context.Context, sel ast.SelectionSet, obj *models.StandardPart) graphql.Marshaler {
+func (ec *executionContext) _StandardPart(ctx context.Context, sel ast.SelectionSet, obj *models.StandardPartDTO) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, standardPartImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -9309,7 +9313,7 @@ func (ec *executionContext) _Subscription(ctx context.Context, sel ast.Selection
 
 var toolImplementors = []string{"Tool"}
 
-func (ec *executionContext) _Tool(ctx context.Context, sel ast.SelectionSet, obj *models.Tool) graphql.Marshaler {
+func (ec *executionContext) _Tool(ctx context.Context, sel ast.SelectionSet, obj *models.ToolDTO) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, toolImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -9687,7 +9691,7 @@ func (ec *executionContext) _ToolRepairRecord(ctx context.Context, sel ast.Selec
 
 var toolTypeImplementors = []string{"ToolType"}
 
-func (ec *executionContext) _ToolType(ctx context.Context, sel ast.SelectionSet, obj *models.ToolType) graphql.Marshaler {
+func (ec *executionContext) _ToolType(ctx context.Context, sel ast.SelectionSet, obj *models.ToolTypeDTO) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, toolTypeImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -9699,20 +9703,51 @@ func (ec *executionContext) _ToolType(ctx context.Context, sel ast.SelectionSet,
 		case "id":
 			out.Values[i] = ec._ToolType_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "code":
 			out.Values[i] = ec._ToolType_code(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "name":
 			out.Values[i] = ec._ToolType_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "tools":
-			out.Values[i] = ec._ToolType_tools(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ToolType_tools(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9738,7 +9773,7 @@ func (ec *executionContext) _ToolType(ctx context.Context, sel ast.SelectionSet,
 
 var userImplementors = []string{"User"}
 
-func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *models.User) graphql.Marshaler {
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *models.UserDTO) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -10551,7 +10586,7 @@ func (ec *executionContext) unmarshalOCreateUserInput2ᚖgithubᚗcomᚋSvarcf�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOFile2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFile(ctx context.Context, sel ast.SelectionSet, v []*models.File) graphql.Marshaler {
+func (ec *executionContext) marshalOFile2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFileDTO(ctx context.Context, sel ast.SelectionSet, v []*models.FileDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10578,7 +10613,7 @@ func (ec *executionContext) marshalOFile2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_go�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFile(ctx, sel, v[i])
+			ret[i] = ec.marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFileDTO(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10592,7 +10627,7 @@ func (ec *executionContext) marshalOFile2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_go�
 	return ret
 }
 
-func (ec *executionContext) marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFile(ctx context.Context, sel ast.SelectionSet, v *models.File) graphql.Marshaler {
+func (ec *executionContext) marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFileDTO(ctx context.Context, sel ast.SelectionSet, v *models.FileDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10641,7 +10676,7 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) marshalOMechanicalPress2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPress(ctx context.Context, sel ast.SelectionSet, v []*models.MechanicalPress) graphql.Marshaler {
+func (ec *executionContext) marshalOMechanicalPress2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPressDTO(ctx context.Context, sel ast.SelectionSet, v []*models.MechanicalPressDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10668,7 +10703,7 @@ func (ec *executionContext) marshalOMechanicalPress2ᚕᚖgithubᚗcomᚋSvarcf�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOMechanicalPress2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPress(ctx, sel, v[i])
+			ret[i] = ec.marshalOMechanicalPress2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPressDTO(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10682,14 +10717,14 @@ func (ec *executionContext) marshalOMechanicalPress2ᚕᚖgithubᚗcomᚋSvarcf�
 	return ret
 }
 
-func (ec *executionContext) marshalOMechanicalPress2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPress(ctx context.Context, sel ast.SelectionSet, v *models.MechanicalPress) graphql.Marshaler {
+func (ec *executionContext) marshalOMechanicalPress2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐMechanicalPressDTO(ctx context.Context, sel ast.SelectionSet, v *models.MechanicalPressDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._MechanicalPress(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalORawMaterial2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterial(ctx context.Context, sel ast.SelectionSet, v []*models.RawMaterial) graphql.Marshaler {
+func (ec *executionContext) marshalORawMaterial2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterialDTO(ctx context.Context, sel ast.SelectionSet, v []*models.RawMaterialDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10716,7 +10751,7 @@ func (ec *executionContext) marshalORawMaterial2ᚕᚖgithubᚗcomᚋSvarcfᚋse
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterial(ctx, sel, v[i])
+			ret[i] = ec.marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterialDTO(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10730,14 +10765,14 @@ func (ec *executionContext) marshalORawMaterial2ᚕᚖgithubᚗcomᚋSvarcfᚋse
 	return ret
 }
 
-func (ec *executionContext) marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterial(ctx context.Context, sel ast.SelectionSet, v *models.RawMaterial) graphql.Marshaler {
+func (ec *executionContext) marshalORawMaterial2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRawMaterialDTO(ctx context.Context, sel ast.SelectionSet, v *models.RawMaterialDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._RawMaterial(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v []*models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRoleDTO(ctx context.Context, sel ast.SelectionSet, v []*models.RoleDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10764,7 +10799,7 @@ func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_go�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalORole2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
+			ret[i] = ec.marshalORole2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRoleDTO(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10778,14 +10813,14 @@ func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_go�
 	return ret
 }
 
-func (ec *executionContext) marshalORole2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v *models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalORole2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐRoleDTO(ctx context.Context, sel ast.SelectionSet, v *models.RoleDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Role(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOStandardPart2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPart(ctx context.Context, sel ast.SelectionSet, v []*models.StandardPart) graphql.Marshaler {
+func (ec *executionContext) marshalOStandardPart2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPartDTO(ctx context.Context, sel ast.SelectionSet, v []*models.StandardPartDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10812,7 +10847,7 @@ func (ec *executionContext) marshalOStandardPart2ᚕᚖgithubᚗcomᚋSvarcfᚋs
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOStandardPart2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPart(ctx, sel, v[i])
+			ret[i] = ec.marshalOStandardPart2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPartDTO(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10826,7 +10861,7 @@ func (ec *executionContext) marshalOStandardPart2ᚕᚖgithubᚗcomᚋSvarcfᚋs
 	return ret
 }
 
-func (ec *executionContext) marshalOStandardPart2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPart(ctx context.Context, sel ast.SelectionSet, v *models.StandardPart) graphql.Marshaler {
+func (ec *executionContext) marshalOStandardPart2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐStandardPartDTO(ctx context.Context, sel ast.SelectionSet, v *models.StandardPartDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10885,11 +10920,7 @@ func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel
 	return res
 }
 
-func (ec *executionContext) marshalOTool2githubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx context.Context, sel ast.SelectionSet, v models.Tool) graphql.Marshaler {
-	return ec._Tool(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalOTool2ᚕgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx context.Context, sel ast.SelectionSet, v []models.Tool) graphql.Marshaler {
+func (ec *executionContext) marshalOTool2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolDTO(ctx context.Context, sel ast.SelectionSet, v []*models.ToolDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10916,7 +10947,7 @@ func (ec *executionContext) marshalOTool2ᚕgithubᚗcomᚋSvarcfᚋsever_goᚋi
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOTool2githubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx, sel, v[i])
+			ret[i] = ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolDTO(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10930,48 +10961,7 @@ func (ec *executionContext) marshalOTool2ᚕgithubᚗcomᚋSvarcfᚋsever_goᚋi
 	return ret
 }
 
-func (ec *executionContext) marshalOTool2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx context.Context, sel ast.SelectionSet, v []*models.Tool) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐTool(ctx context.Context, sel ast.SelectionSet, v *models.Tool) graphql.Marshaler {
+func (ec *executionContext) marshalOTool2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolDTO(ctx context.Context, sel ast.SelectionSet, v *models.ToolDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -11026,7 +11016,7 @@ func (ec *executionContext) marshalOToolRepairRecord2ᚖgithubᚗcomᚋSvarcfᚋ
 	return ec._ToolRepairRecord(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOToolType2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx context.Context, sel ast.SelectionSet, v []*models.ToolType) graphql.Marshaler {
+func (ec *executionContext) marshalOToolType2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolTypeDTO(ctx context.Context, sel ast.SelectionSet, v []*models.ToolTypeDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -11053,7 +11043,7 @@ func (ec *executionContext) marshalOToolType2ᚕᚖgithubᚗcomᚋSvarcfᚋsever
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx, sel, v[i])
+			ret[i] = ec.marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolTypeDTO(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -11067,7 +11057,7 @@ func (ec *executionContext) marshalOToolType2ᚕᚖgithubᚗcomᚋSvarcfᚋsever
 	return ret
 }
 
-func (ec *executionContext) marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolType(ctx context.Context, sel ast.SelectionSet, v *models.ToolType) graphql.Marshaler {
+func (ec *executionContext) marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐToolTypeDTO(ctx context.Context, sel ast.SelectionSet, v *models.ToolTypeDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -11106,7 +11096,7 @@ func (ec *executionContext) unmarshalOUpdateToolTypeInput2ᚖgithubᚗcomᚋSvar
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v []*models.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUserDTO(ctx context.Context, sel ast.SelectionSet, v []*models.UserDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -11133,7 +11123,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_go�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUserDTO(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -11147,7 +11137,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋSvarcfᚋsever_go�
 	return ret
 }
 
-func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v *models.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐUserDTO(ctx context.Context, sel ast.SelectionSet, v *models.UserDTO) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

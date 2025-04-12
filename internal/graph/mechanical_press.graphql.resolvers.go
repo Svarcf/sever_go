@@ -13,7 +13,7 @@ import (
 )
 
 // CreateMechanicalPress is the resolver for the createMechanicalPress field.
-func (r *mutationResolver) CreateMechanicalPress(ctx context.Context, createMechanicalPressInput *model.CreateMechanicalPressInput) (*models.MechanicalPress, error) {
+func (r *mutationResolver) CreateMechanicalPress(ctx context.Context, createMechanicalPressInput *model.CreateMechanicalPressInput) (*models.MechanicalPressDTO, error) {
 	mechanicalPress := models.NewMechanicalPress(
 		createMechanicalPressInput.Code,
 		createMechanicalPressInput.Name,
@@ -23,16 +23,16 @@ func (r *mutationResolver) CreateMechanicalPress(ctx context.Context, createMech
 }
 
 // UpdateMechanicalPress is the resolver for the updateMechanicalPress field.
-func (r *mutationResolver) UpdateMechanicalPress(ctx context.Context, updateMechanicalPressInput *model.UpdateMechanicalPressInput) (*models.MechanicalPress, error) {
+func (r *mutationResolver) UpdateMechanicalPress(ctx context.Context, updateMechanicalPressInput *model.UpdateMechanicalPressInput) (*models.MechanicalPressDTO, error) {
 	panic(fmt.Errorf("not implemented: UpdateMechanicalPress - updateMechanicalPress"))
 }
 
 // MechanicalPresses is the resolver for the mechanicalPresses field.
-func (r *queryResolver) MechanicalPresses(ctx context.Context) ([]*models.MechanicalPress, error) {
+func (r *queryResolver) MechanicalPresses(ctx context.Context) ([]*models.MechanicalPressDTO, error) {
 	return r.MechanicalPressService.GetMechanicalPresses()
 }
 
 // MechanicalPress is the resolver for the mechanicalPress field.
-func (r *queryResolver) MechanicalPress(ctx context.Context, id uint) (*models.MechanicalPress, error) {
+func (r *queryResolver) MechanicalPress(ctx context.Context, id uint) (*models.MechanicalPressDTO, error) {
 	return r.MechanicalPressService.GetMechanicalPressById(id)
 }

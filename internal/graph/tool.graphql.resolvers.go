@@ -12,7 +12,7 @@ import (
 )
 
 // CreateTool is the resolver for the createTool field.
-func (r *mutationResolver) CreateTool(ctx context.Context, createToolInput *model.CreateToolInput) (*models.Tool, error) {
+func (r *mutationResolver) CreateTool(ctx context.Context, createToolInput *model.CreateToolInput) (*models.ToolDTO, error) {
 	var dimensions, note, toolStroke, workpieceDescription string
 	var toolType uint
 	if createToolInput.Dimensions != nil {
@@ -45,38 +45,38 @@ func (r *mutationResolver) CreateTool(ctx context.Context, createToolInput *mode
 }
 
 // Tools is the resolver for the tools field.
-func (r *queryResolver) Tools(ctx context.Context) ([]*models.Tool, error) {
+func (r *queryResolver) Tools(ctx context.Context) ([]*models.ToolDTO, error) {
 	return r.ToolService.GetTools()
 }
 
 // Tool is the resolver for the tool field.
-func (r *queryResolver) Tool(ctx context.Context, code string) (*models.Tool, error) {
+func (r *queryResolver) Tool(ctx context.Context, code string) (*models.ToolDTO, error) {
 	return r.ToolService.GetToolByCode(code)
 }
 
 // ToolType is the resolver for the toolType field.
-func (r *toolResolver) ToolType(ctx context.Context, obj *models.Tool) (*models.ToolType, error) {
+func (r *toolResolver) ToolType(ctx context.Context, obj *models.ToolDTO) (*models.ToolTypeDTO, error) {
 	return r.ToolTypeService.GetToolTypeById(obj.ToolTypeID)
 }
 
 // RawMaterials is the resolver for the rawMaterials field.
-func (r *toolResolver) RawMaterials(ctx context.Context, obj *models.Tool) ([]*models.RawMaterial, error) {
-	return r.ToolService.GetRawMaterials(obj)
+func (r *toolResolver) RawMaterials(ctx context.Context, obj *models.ToolDTO) ([]*models.RawMaterialDTO, error) {
+	return r.ToolService.GetRawMaterials(obj.ToModel())
 }
 
 // StandardParts is the resolver for the standardParts field.
-func (r *toolResolver) StandardParts(ctx context.Context, obj *models.Tool) ([]*models.StandardPart, error) {
-	return r.ToolService.GetStandardParts(obj)
+func (r *toolResolver) StandardParts(ctx context.Context, obj *models.ToolDTO) ([]*models.StandardPartDTO, error) {
+	return r.ToolService.GetStandardParts(obj.ToModel())
 }
 
 // MechanicalPresses is the resolver for the mechanicalPresses field.
-func (r *toolResolver) MechanicalPresses(ctx context.Context, obj *models.Tool) ([]*models.MechanicalPress, error) {
-	return r.ToolService.GetMechanicalPresses(obj)
+func (r *toolResolver) MechanicalPresses(ctx context.Context, obj *models.ToolDTO) ([]*models.MechanicalPressDTO, error) {
+	return r.ToolService.GetMechanicalPresses(obj.ToModel())
 }
 
 // ToolRepairRecords is the resolver for the toolRepairRecords field.
-func (r *toolResolver) ToolRepairRecords(ctx context.Context, obj *models.Tool) ([]*models.ToolRepairRecordDTO, error) {
-	return r.ToolService.GetToolRepairRecords(obj)
+func (r *toolResolver) ToolRepairRecords(ctx context.Context, obj *models.ToolDTO) ([]*models.ToolRepairRecordDTO, error) {
+	return r.ToolService.GetToolRepairRecords(obj.ToModel())
 }
 
 // Tool returns ToolResolver implementation.

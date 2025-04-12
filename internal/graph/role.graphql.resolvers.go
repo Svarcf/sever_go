@@ -12,7 +12,7 @@ import (
 )
 
 // CreateRole is the resolver for the createRole field.
-func (r *mutationResolver) CreateRole(ctx context.Context, createRoleInput *model.CreateRoleInput) (*models.Role, error) {
+func (r *mutationResolver) CreateRole(ctx context.Context, createRoleInput *model.CreateRoleInput) (*models.RoleDTO, error) {
 	role := models.NewRole(
 		createRoleInput.Name,
 	)
@@ -20,11 +20,11 @@ func (r *mutationResolver) CreateRole(ctx context.Context, createRoleInput *mode
 }
 
 // Roles is the resolver for the roles field.
-func (r *queryResolver) Roles(ctx context.Context) ([]*models.Role, error) {
+func (r *queryResolver) Roles(ctx context.Context) ([]*models.RoleDTO, error) {
 	return r.RoleService.GetAllRoles()
 }
 
 // Role is the resolver for the role field.
-func (r *queryResolver) Role(ctx context.Context, id uint) (*models.Role, error) {
+func (r *queryResolver) Role(ctx context.Context, id uint) (*models.RoleDTO, error) {
 	return r.RoleService.GetRoleByID(id)
 }

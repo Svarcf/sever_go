@@ -12,18 +12,18 @@ import (
 )
 
 // CreateFile is the resolver for the createFile field.
-func (r *mutationResolver) CreateFile(ctx context.Context, createFileInput *model.CreateFileInput) (*models.File, error) {
+func (r *mutationResolver) CreateFile(ctx context.Context, createFileInput *model.CreateFileInput) (*models.FileDTO, error) {
 	file := models.NewFile(createFileInput.Name, createFileInput.Location)
 	return r.FileService.CreateFile(file)
 }
 
 // Files is the resolver for the files field.
-func (r *queryResolver) Files(ctx context.Context) ([]*models.File, error) {
+func (r *queryResolver) Files(ctx context.Context) ([]*models.FileDTO, error) {
 	return r.FileService.GetFiles()
 }
 
 // File is the resolver for the file field.
-func (r *queryResolver) File(ctx context.Context, id uint) (*models.File, error) {
+func (r *queryResolver) File(ctx context.Context, id uint) (*models.FileDTO, error) {
 	return r.FileService.GetFileById(id)
 }
 

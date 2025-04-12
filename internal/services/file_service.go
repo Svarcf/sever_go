@@ -13,28 +13,32 @@ func NewFileService(db *gorm.DB) *FileService {
 	return &FileService{DB: db}
 }
 
-func (s *FileService) CreateFile(file *models.File) (*models.File, error) {
+func (s *FileService) CreateFile(file *models.File) (*models.FileDTO, error) {
 	err := s.DB.Create(file).Error
 	if err != nil {
 		return nil, err
 	}
-	return file, nil
+	return file.ToDTO(), nil
 }
 
-func (s *FileService) GetFileById(id uint) (*models.File, error) {
+func (s *FileService) GetFileById(id uint) (*models.FileDTO, error) {
 	var file *models.File
 	err := s.DB.First(&file, id).Error
 	if err != nil {
 		return nil, err
 	}
-	return file, nil
+	return file.ToDTO(), nil
 }
 
-func (s *FileService) GetFiles() ([]*models.File, error) {
+func (s *FileService) GetFiles() ([]*models.FileDTO, error) {
 	var files []*models.File
 	err := s.DB.Find(&files).Error
 	if err != nil {
 		return nil, err
 	}
-	return files, nil
+	dtos := models.Map(files, func(file *models.File) *models.FileDTO {
+		return file.ToDTO()
+	})
+
+	return dtos, nil
 }

@@ -99,10 +99,14 @@ models:
       - github.com/99designs/gqlgen/graphql.Uint32
       - github.com/99designs/gqlgen/graphql.Uint64
   User:
+    model:
+      - github.com/Svarcf/sever_go/internal/models.UserDTO
     fields:
       role:
         resolver: true
   Tool:
+    model:
+      - github.com/Svarcf/sever_go/internal/models.ToolDTO
     fields:
       toolType:
         resolver: true
@@ -120,3 +124,21 @@ models:
     fields:
       tool:
         resolver: true
+  File:
+    model:
+      - github.com/Svarcf/sever_go/internal/models.FileDTO
+  MechanicalPress:
+    model:
+      - github.com/Svarcf/sever_go/internal/models.MechanicalPressDTO
+  RawMaterial:
+    model:
+      - github.com/Svarcf/sever_go/internal/models.RawMaterialDTO
+  Role:
+    model:
+      - github.com/Svarcf/sever_go/internal/models.RoleDTO
+  StandardPart:
+    model:
+      - github.com/Svarcf/sever_go/internal/models.StandardPartDTO
+  ToolType:
+    model:
+      - github.com/Svarcf/sever_go/internal/models.ToolTypeDTO

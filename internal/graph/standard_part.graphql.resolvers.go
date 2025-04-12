@@ -13,7 +13,7 @@ import (
 )
 
 // CreateStandardPart is the resolver for the createStandardPart field.
-func (r *mutationResolver) CreateStandardPart(ctx context.Context, createStandardPartInput *model.CreateStandardPartInput) (*models.StandardPart, error) {
+func (r *mutationResolver) CreateStandardPart(ctx context.Context, createStandardPartInput *model.CreateStandardPartInput) (*models.StandardPartDTO, error) {
 	standardPart := models.NewStandardPart(
 		createStandardPartInput.Code,
 		createStandardPartInput.Name,
@@ -23,16 +23,16 @@ func (r *mutationResolver) CreateStandardPart(ctx context.Context, createStandar
 }
 
 // UpdateStandardPart is the resolver for the updateStandardPart field.
-func (r *mutationResolver) UpdateStandardPart(ctx context.Context, updateStandardPartInput *model.UpdateStandardPartInput) (*models.StandardPart, error) {
+func (r *mutationResolver) UpdateStandardPart(ctx context.Context, updateStandardPartInput *model.UpdateStandardPartInput) (*models.StandardPartDTO, error) {
 	panic(fmt.Errorf("not implemented: UpdateStandardPart - updateStandardPart"))
 }
 
 // StandardParts is the resolver for the standardParts field.
-func (r *queryResolver) StandardParts(ctx context.Context) ([]*models.StandardPart, error) {
+func (r *queryResolver) StandardParts(ctx context.Context) ([]*models.StandardPartDTO, error) {
 	return r.StandardPartService.GetStandardParts()
 }
 
 // StandardPart is the resolver for the standardPart field.
-func (r *queryResolver) StandardPart(ctx context.Context, id uint) (*models.StandardPart, error) {
+func (r *queryResolver) StandardPart(ctx context.Context, id uint) (*models.StandardPartDTO, error) {
 	return r.StandardPartService.GetStandardPartById(id)
 }

@@ -30,6 +30,17 @@ func (u *User) ToDTO() *UserDTO {
 	}
 }
 
+func (u *UserDTO) ToModel() *User {
+	return &User{
+		Id:        u.Id,
+		Username:  u.Username,
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Password:  u.Password,
+		RoleID:    u.Role.Id,
+	}
+}
+
 func NewUser(username string, firstName string, lastName string, password string, roleID uint) *User {
 	return &User{Username: username, FirstName: firstName, LastName: lastName, Password: password, RoleID: roleID}
 }

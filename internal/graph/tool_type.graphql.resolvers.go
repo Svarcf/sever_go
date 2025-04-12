@@ -13,7 +13,7 @@ import (
 )
 
 // CreateToolType is the resolver for the createToolType field.
-func (r *mutationResolver) CreateToolType(ctx context.Context, createToolTypeInput *model.CreateToolTypeInput) (*models.ToolType, error) {
+func (r *mutationResolver) CreateToolType(ctx context.Context, createToolTypeInput *model.CreateToolTypeInput) (*models.ToolTypeDTO, error) {
 	toolType := models.NewToolType(
 		createToolTypeInput.Code,
 		createToolTypeInput.Name,
@@ -22,16 +22,26 @@ func (r *mutationResolver) CreateToolType(ctx context.Context, createToolTypeInp
 }
 
 // UpdateToolType is the resolver for the updateToolType field.
-func (r *mutationResolver) UpdateToolType(ctx context.Context, updateToolTypeInput *model.UpdateToolTypeInput) (*models.ToolType, error) {
+func (r *mutationResolver) UpdateToolType(ctx context.Context, updateToolTypeInput *model.UpdateToolTypeInput) (*models.ToolTypeDTO, error) {
 	panic(fmt.Errorf("not implemented: UpdateToolType - updateToolType"))
 }
 
 // ToolTypes is the resolver for the toolTypes field.
-func (r *queryResolver) ToolTypes(ctx context.Context) ([]*models.ToolType, error) {
+func (r *queryResolver) ToolTypes(ctx context.Context) ([]*models.ToolTypeDTO, error) {
 	return r.ToolTypeService.GetToolTypes()
 }
 
 // ToolType is the resolver for the toolType field.
-func (r *queryResolver) ToolType(ctx context.Context, code string) (*models.ToolType, error) {
+func (r *queryResolver) ToolType(ctx context.Context, code string) (*models.ToolTypeDTO, error) {
 	return r.ToolTypeService.GetToolTypeByCode(code)
 }
+
+// Tools is the resolver for the tools field.
+func (r *toolTypeResolver) Tools(ctx context.Context, obj *models.ToolTypeDTO) ([]*models.ToolDTO, error) {
+	return r.ToolTypeService.GetTools(obj.ToModel())
+}
+
+// ToolType returns ToolTypeResolver implementation.
+func (r *Resolver) ToolType() ToolTypeResolver { return &toolTypeResolver{r} }
+
+type toolTypeResolver struct{ *Resolver }
