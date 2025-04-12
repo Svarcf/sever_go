@@ -82,7 +82,7 @@ func (s *ToolService) GetToolRepairRecords(tool *models.Tool) ([]*models.ToolRep
 		return nil, err
 	}
 	dtos := models.Map(toolRepairRecords, func(trr *models.ToolRepairRecord) *models.ToolRepairRecordDTO {
-		return trr.ToDto()
+		return trr.ToDTO()
 	})
 
 	return dtos, nil

@@ -63,7 +63,7 @@ func (trrDto ToolRepairRecordDTO) ToModel() *ToolRepairRecord {
 	return trr
 }
 
-func (trr ToolRepairRecord) ToDto() *ToolRepairRecordDTO {
+func (trr ToolRepairRecord) ToDTO() *ToolRepairRecordDTO {
 	return &ToolRepairRecordDTO{
 		Id:                     trr.Id,
 		DateStarted:            trr.DateStarted,

@@ -18,7 +18,7 @@ func (s *ToolRepairRecordService) CreateToolRepairRecord(toolRepairRecord *model
 	if err != nil {
 		return nil, err
 	}
-	return toolRepairRecord.ToDto(), nil
+	return toolRepairRecord.ToDTO(), nil
 }
 
 func (s *ToolRepairRecordService) GetToolRepairRecordById(id uint) (*models.ToolRepairRecordDTO, error) {
@@ -27,7 +27,7 @@ func (s *ToolRepairRecordService) GetToolRepairRecordById(id uint) (*models.Tool
 	if err != nil {
 		return nil, err
 	}
-	return toolRepairRecord.ToDto(), nil
+	return toolRepairRecord.ToDTO(), nil
 }
 
 func (s *ToolRepairRecordService) GetToolRepairRecords() ([]*models.ToolRepairRecordDTO, error) {
@@ -37,7 +37,7 @@ func (s *ToolRepairRecordService) GetToolRepairRecords() ([]*models.ToolRepairRe
 		return nil, err
 	}
 	dtos := models.Map(toolRepairRecords, func(trr *models.ToolRepairRecord) *models.ToolRepairRecordDTO {
-		return trr.ToDto()
+		return trr.ToDTO()
 	})
 
 	return dtos, nil
