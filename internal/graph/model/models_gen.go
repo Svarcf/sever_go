@@ -42,6 +42,9 @@ type CreateToolInput struct {
 	WorkpieceDescription *string `json:"workpieceDescription,omitempty"`
 	ToolType             *uint   `json:"toolType,omitempty"`
 	ToolAssociation      *uint   `json:"toolAssociation,omitempty"`
+	RawMaterials         []*uint `json:"rawMaterials,omitempty"`
+	StandardParts        []*uint `json:"standardParts,omitempty"`
+	MechanicalPresses    []*uint `json:"mechanicalPresses,omitempty"`
 }
 
 type CreateToolRepairRecordInput struct {

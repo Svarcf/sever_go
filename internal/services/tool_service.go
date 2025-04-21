@@ -13,12 +13,59 @@ func NewToolService(db *gorm.DB) *ToolService {
 	return &ToolService{DB: db}
 }
 
-func (s *ToolService) CreateTool(tool *models.Tool) (*models.ToolDTO, error) {
+func (s *ToolService) CreateTool(tool *models.Tool, standardParts []*uint, mechanicalPresses []*uint, rawMaterials []*uint) (*models.ToolDTO, error) {
 	err := s.DB.Create(tool).Error
 	if err != nil {
 		return nil, err
 	}
+	err = s.createToolAssociations(tool, standardParts, mechanicalPresses, rawMaterials)
+	if err != nil {
+		return nil, err
+	}
 	return tool.ToDTO(), nil
+}
+
+func (s *ToolService) createToolAssociations(tool *models.Tool, standardParts []*uint, mechanicalPresses []*uint, rawMaterials []*uint) error {
+	if standardParts != nil && len(standardParts) > 0 {
+		var standardPartObjects []*models.StandardPart
+		for _, id := range standardParts {
+			if id != nil {
+				standardPartObjects = append(standardPartObjects, &models.StandardPart{Id: *id})
+			}
+		}
+		err := s.DB.Model(tool).Association("StandardParts").Replace(standardPartObjects)
+		if err != nil {
+			return err
+		}
+	}
+
+	if mechanicalPresses != nil && len(mechanicalPresses) > 0 {
+		var mechanicalPressObjects []*models.MechanicalPress
+		for _, id := range mechanicalPresses {
+			if id != nil {
+				mechanicalPressObjects = append(mechanicalPressObjects, &models.MechanicalPress{Id: *id})
+			}
+		}
+		err := s.DB.Model(tool).Association("MechanicalPresses").Replace(mechanicalPressObjects)
+		if err != nil {
+			return err
+		}
+	}
+
+	if rawMaterials != nil && len(rawMaterials) > 0 {
+		var rawMaterialObjects []*models.RawMaterial
+		for _, id := range rawMaterials {
+			if id != nil {
+				rawMaterialObjects = append(rawMaterialObjects, &models.RawMaterial{Id: *id})
+			}
+		}
+		err := s.DB.Model(tool).Association("RawMaterials").Replace(rawMaterialObjects)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (s *ToolService) GetToolById(id uint) (*models.ToolDTO, error) {

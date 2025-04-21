@@ -15,6 +15,7 @@ import (
 func (r *mutationResolver) CreateTool(ctx context.Context, createToolInput *model.CreateToolInput) (*models.ToolDTO, error) {
 	var dimensions, note, toolStroke, workpieceDescription string
 	var toolType uint
+	var standardParts, rawMaterials, mechanicalPresses []*uint
 	if createToolInput.Dimensions != nil {
 		dimensions = *createToolInput.Dimensions
 	}
@@ -30,6 +31,15 @@ func (r *mutationResolver) CreateTool(ctx context.Context, createToolInput *mode
 	if createToolInput.ToolType != nil {
 		toolType = *createToolInput.ToolType
 	}
+	if createToolInput.StandardParts != nil {
+		standardParts = createToolInput.StandardParts
+	}
+	if createToolInput.RawMaterials != nil {
+		rawMaterials = createToolInput.RawMaterials
+	}
+	if createToolInput.MechanicalPresses != nil {
+		mechanicalPresses = createToolInput.MechanicalPresses
+	}
 
 	tool := models.NewTool(
 		createToolInput.Code,
@@ -41,7 +51,7 @@ func (r *mutationResolver) CreateTool(ctx context.Context, createToolInput *mode
 		toolType,
 		createToolInput.ToolAssociation,
 	)
-	return r.ToolService.CreateTool(tool)
+	return r.ToolService.CreateTool(tool, standardParts, mechanicalPresses, rawMaterials)
 }
 
 // Tools is the resolver for the tools field.

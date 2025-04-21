@@ -8118,7 +8118,7 @@ func (ec *executionContext) unmarshalInputCreateToolInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"code", "name", "creationDate", "dimensions", "note", "toolStroke", "workpieceDescription", "toolType", "toolAssociation"}
+	fieldsInOrder := [...]string{"code", "name", "creationDate", "dimensions", "note", "toolStroke", "workpieceDescription", "toolType", "toolAssociation", "rawMaterials", "standardParts", "mechanicalPresses"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -8188,6 +8188,27 @@ func (ec *executionContext) unmarshalInputCreateToolInput(ctx context.Context, o
 				return it, err
 			}
 			it.ToolAssociation = data
+		case "rawMaterials":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rawMaterials"))
+			data, err := ec.unmarshalOID2ᚕᚖuint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RawMaterials = data
+		case "standardParts":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardParts"))
+			data, err := ec.unmarshalOID2ᚕᚖuint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StandardParts = data
+		case "mechanicalPresses":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("mechanicalPresses"))
+			data, err := ec.unmarshalOID2ᚕᚖuint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MechanicalPresses = data
 		}
 	}
 
@@ -10632,6 +10653,38 @@ func (ec *executionContext) marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋi
 		return graphql.Null
 	}
 	return ec._File(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOID2ᚕᚖuint(ctx context.Context, v interface{}) ([]*uint, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*uint, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOID2ᚖuint(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOID2ᚕᚖuint(ctx context.Context, sel ast.SelectionSet, v []*uint) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalOID2ᚖuint(ctx, sel, v[i])
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOID2ᚖuint(ctx context.Context, v interface{}) (*uint, error) {
