@@ -5,6 +5,7 @@ extend type Query {
 
 extend type Mutation {
     createFile(createFileInput: CreateFileInput): File
+    updateFile(updateFileInput: UpdateFileInput): File
 }
 
 type File {
@@ -14,6 +15,12 @@ type File {
 }
 
 input CreateFileInput {
+    name: String!
+    location: String!
+}
+
+input UpdateFileInput {
+    id: ID!
     name: String!
     location: String!
 }

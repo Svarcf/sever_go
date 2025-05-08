@@ -78,6 +78,7 @@ type ComplexityRoot struct {
 		CreateToolRepairRecord func(childComplexity int, createToolRepairRecordInput *model.CreateToolRepairRecordInput) int
 		CreateToolType         func(childComplexity int, createToolTypeInput *model.CreateToolTypeInput) int
 		CreateUser             func(childComplexity int, createUserInput *model.CreateUserInput) int
+		UpdateFile             func(childComplexity int, updateFileInput *model.UpdateFileInput) int
 		UpdateMechanicalPress  func(childComplexity int, updateMechanicalPressInput *model.UpdateMechanicalPressInput) int
 		UpdateRawMaterial      func(childComplexity int, updateRawMaterialInput *model.UpdateRawMaterialInput) int
 		UpdateStandardPart     func(childComplexity int, updateStandardPartInput *model.UpdateStandardPartInput) int
@@ -177,6 +178,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreateFile(ctx context.Context, createFileInput *model.CreateFileInput) (*models.FileDTO, error)
+	UpdateFile(ctx context.Context, updateFileInput *model.UpdateFileInput) (*models.FileDTO, error)
 	CreateMechanicalPress(ctx context.Context, createMechanicalPressInput *model.CreateMechanicalPressInput) (*models.MechanicalPressDTO, error)
 	UpdateMechanicalPress(ctx context.Context, updateMechanicalPressInput *model.UpdateMechanicalPressInput) (*models.MechanicalPressDTO, error)
 	CreateRawMaterial(ctx context.Context, createRawMaterialInput *model.CreateRawMaterialInput) (*models.RawMaterialDTO, error)
@@ -409,6 +411,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["createUserInput"].(*model.CreateUserInput)), true
+
+	case "Mutation.updateFile":
+		if e.complexity.Mutation.UpdateFile == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateFile_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateFile(childComplexity, args["updateFileInput"].(*model.UpdateFileInput)), true
 
 	case "Mutation.updateMechanicalPress":
 		if e.complexity.Mutation.UpdateMechanicalPress == nil {
@@ -961,6 +975,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateToolRepairRecordInput,
 		ec.unmarshalInputCreateToolTypeInput,
 		ec.unmarshalInputCreateUserInput,
+		ec.unmarshalInputUpdateFileInput,
 		ec.unmarshalInputUpdateMechanicalPressInput,
 		ec.unmarshalInputUpdateRawMaterialInput,
 		ec.unmarshalInputUpdateStandardPartInput,
@@ -1310,6 +1325,29 @@ func (ec *executionContext) field_Mutation_createUser_argsCreateUserInput(
 	}
 
 	var zeroVal *model.CreateUserInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateFile_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	arg0, err := ec.field_Mutation_updateFile_argsUpdateFileInput(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["updateFileInput"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_updateFile_argsUpdateFileInput(
+	ctx context.Context,
+	rawArgs map[string]interface{},
+) (*model.UpdateFileInput, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("updateFileInput"))
+	if tmp, ok := rawArgs["updateFileInput"]; ok {
+		return ec.unmarshalOUpdateFileInput2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋgraphᚋmodelᚐUpdateFileInput(ctx, tmp)
+	}
+
+	var zeroVal *model.UpdateFileInput
 	return zeroVal, nil
 }
 
@@ -2076,6 +2114,66 @@ func (ec *executionContext) fieldContext_Mutation_createFile(ctx context.Context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createFile_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateFile(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateFile(rctx, fc.Args["updateFileInput"].(*model.UpdateFileInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.FileDTO)
+	fc.Result = res
+	return ec.marshalOFile2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋmodelsᚐFileDTO(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_File_id(ctx, field)
+			case "name":
+				return ec.fieldContext_File_name(ctx, field)
+			case "location":
+				return ec.fieldContext_File_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type File", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateFile_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -8394,6 +8492,47 @@ func (ec *executionContext) unmarshalInputCreateUserInput(ctx context.Context, o
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateFileInput(ctx context.Context, obj interface{}) (model.UpdateFileInput, error) {
+	var it model.UpdateFileInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "name", "location"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2uint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "location":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("location"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Location = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateMechanicalPressInput(ctx context.Context, obj interface{}) (model.UpdateMechanicalPressInput, error) {
 	var it model.UpdateMechanicalPressInput
 	asMap := map[string]interface{}{}
@@ -8702,6 +8841,10 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "createFile":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createFile(ctx, field)
+			})
+		case "updateFile":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateFile(ctx, field)
 			})
 		case "createMechanicalPress":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -11115,6 +11258,14 @@ func (ec *executionContext) marshalOToolType2ᚖgithubᚗcomᚋSvarcfᚋsever_go
 		return graphql.Null
 	}
 	return ec._ToolType(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOUpdateFileInput2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋgraphᚋmodelᚐUpdateFileInput(ctx context.Context, v interface{}) (*model.UpdateFileInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUpdateFileInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOUpdateMechanicalPressInput2ᚖgithubᚗcomᚋSvarcfᚋsever_goᚋinternalᚋgraphᚋmodelᚐUpdateMechanicalPressInput(ctx context.Context, v interface{}) (*model.UpdateMechanicalPressInput, error) {

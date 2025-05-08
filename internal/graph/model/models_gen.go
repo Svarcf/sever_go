@@ -82,6 +82,12 @@ type Query struct {
 type Subscription struct {
 }
 
+type UpdateFileInput struct {
+	ID       uint   `json:"id"`
+	Name     string `json:"name"`
+	Location string `json:"location"`
+}
+
 type UpdateMechanicalPressInput struct {
 	ID   int    `json:"id"`
 	Code string `json:"code"`

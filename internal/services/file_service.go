@@ -42,3 +42,11 @@ func (s *FileService) GetFiles() ([]*models.FileDTO, error) {
 
 	return dtos, nil
 }
+
+func (s *FileService) UpdateFile(file *models.File) (*models.FileDTO, error) {
+	err := s.DB.Save(file).Error
+	if err != nil {
+		return nil, err
+	}
+	return file.ToDTO(), nil
+}

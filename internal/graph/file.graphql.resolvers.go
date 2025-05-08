@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
 )
@@ -15,6 +14,13 @@ import (
 func (r *mutationResolver) CreateFile(ctx context.Context, createFileInput *model.CreateFileInput) (*models.FileDTO, error) {
 	file := models.NewFile(createFileInput.Name, createFileInput.Location)
 	return r.FileService.CreateFile(file)
+}
+
+// UpdateFile is the resolver for the updateFile field.
+func (r *mutationResolver) UpdateFile(ctx context.Context, updateFileInput *model.UpdateFileInput) (*models.FileDTO, error) {
+	file := models.NewFile(updateFileInput.Name, updateFileInput.Location)
+	file.Id = updateFileInput.ID
+	return r.FileService.UpdateFile(file)
 }
 
 // Files is the resolver for the files field.
