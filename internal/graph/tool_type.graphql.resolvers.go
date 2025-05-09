@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
 )
@@ -27,7 +28,6 @@ func (r *mutationResolver) UpdateToolType(ctx context.Context, updateToolTypeInp
 	)
 	toolType.Id = updateToolTypeInput.ID
 	return r.ToolTypeService.UpdateToolType(toolType)
-
 }
 
 // ToolTypes is the resolver for the toolTypes field.

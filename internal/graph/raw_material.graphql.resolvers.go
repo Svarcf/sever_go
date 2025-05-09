@@ -6,8 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
-
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
 )
@@ -17,13 +15,18 @@ func (r *mutationResolver) CreateRawMaterial(ctx context.Context, createRawMater
 	rawMaterial := models.NewRawMaterial(
 		createRawMaterialInput.Code,
 		createRawMaterialInput.Name,
-		1)
+		createRawMaterialInput.Number)
 	return r.RawMaterialService.CreateRawMaterial(rawMaterial)
 }
 
 // UpdateRawMaterial is the resolver for the updateRawMaterial field.
 func (r *mutationResolver) UpdateRawMaterial(ctx context.Context, updateRawMaterialInput *model.UpdateRawMaterialInput) (*models.RawMaterialDTO, error) {
-	panic(fmt.Errorf("not implemented: UpdateRawMaterial - updateRawMaterial"))
+	rawMaterial := models.NewRawMaterial(
+		updateRawMaterialInput.Code,
+		updateRawMaterialInput.Name,
+		updateRawMaterialInput.Number)
+	rawMaterial.Id = updateRawMaterialInput.ID
+	return r.RawMaterialService.UpdateRawMaterial(rawMaterial)
 }
 
 // RawMaterials is the resolver for the rawMaterials field.

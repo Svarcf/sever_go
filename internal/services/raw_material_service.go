@@ -21,6 +21,14 @@ func (s *RawMaterialService) CreateRawMaterial(rawMaterial *models.RawMaterial) 
 	return rawMaterial.ToDTO(), nil
 }
 
+func (s *RawMaterialService) UpdateRawMaterial(rawMaterial *models.RawMaterial) (*models.RawMaterialDTO, error) {
+	err := s.DB.Save(rawMaterial).Error
+	if err != nil {
+		return nil, err
+	}
+	return rawMaterial.ToDTO(), nil
+}
+
 func (s *RawMaterialService) GetRawMaterialById(id uint) (*models.RawMaterialDTO, error) {
 	var rawMaterial *models.RawMaterial
 	err := s.DB.First(&rawMaterial, id).Error
