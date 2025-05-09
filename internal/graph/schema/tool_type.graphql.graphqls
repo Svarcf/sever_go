@@ -1,6 +1,7 @@
 extend type Query {
     toolTypes: [ToolType]
     toolType(code: String!): ToolType
+    toolTypeById(id: ID!): ToolType
 }
 
 extend type Mutation {
@@ -21,7 +22,7 @@ input CreateToolTypeInput {
 }
 
 input UpdateToolTypeInput {
-    id: Int!
+    id: ID!
     code: String!
     name: String!
 }

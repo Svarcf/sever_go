@@ -6,8 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
-
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
 )
@@ -23,7 +21,13 @@ func (r *mutationResolver) CreateToolType(ctx context.Context, createToolTypeInp
 
 // UpdateToolType is the resolver for the updateToolType field.
 func (r *mutationResolver) UpdateToolType(ctx context.Context, updateToolTypeInput *model.UpdateToolTypeInput) (*models.ToolTypeDTO, error) {
-	panic(fmt.Errorf("not implemented: UpdateToolType - updateToolType"))
+	toolType := models.NewToolType(
+		updateToolTypeInput.Code,
+		updateToolTypeInput.Name,
+	)
+	toolType.Id = updateToolTypeInput.ID
+	return r.ToolTypeService.UpdateToolType(toolType)
+
 }
 
 // ToolTypes is the resolver for the toolTypes field.
@@ -34,6 +38,11 @@ func (r *queryResolver) ToolTypes(ctx context.Context) ([]*models.ToolTypeDTO, e
 // ToolType is the resolver for the toolType field.
 func (r *queryResolver) ToolType(ctx context.Context, code string) (*models.ToolTypeDTO, error) {
 	return r.ToolTypeService.GetToolTypeByCode(code)
+}
+
+// ToolTypeByID is the resolver for the toolTypeById field.
+func (r *queryResolver) ToolTypeByID(ctx context.Context, id uint) (*models.ToolTypeDTO, error) {
+	return r.ToolTypeService.GetToolTypeById(id)
 }
 
 // Tools is the resolver for the tools field.

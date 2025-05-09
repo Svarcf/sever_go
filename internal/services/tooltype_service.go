@@ -21,6 +21,14 @@ func (s *ToolTypeService) CreateToolType(toolType *models.ToolType) (*models.Too
 	return toolType.ToDTO(), nil
 }
 
+func (s *ToolTypeService) UpdateToolType(toolType *models.ToolType) (*models.ToolTypeDTO, error) {
+	err := s.DB.Save(toolType).Error
+	if err != nil {
+		return nil, err
+	}
+	return toolType.ToDTO(), nil
+}
+
 func (s *ToolTypeService) GetToolTypeByCode(code string) (*models.ToolTypeDTO, error) {
 	var toolType *models.ToolType
 	err := s.DB.Where("code = ?", code).First(&toolType).Error
