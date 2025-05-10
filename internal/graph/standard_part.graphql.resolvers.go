@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
@@ -22,9 +21,14 @@ func (r *mutationResolver) CreateStandardPart(ctx context.Context, createStandar
 	return r.StandardPartService.CreateStandardPart(standardPart)
 }
 
-// UpdateStandardPart is the resolver for the updateStandardPart field.
 func (r *mutationResolver) UpdateStandardPart(ctx context.Context, updateStandardPartInput *model.UpdateStandardPartInput) (*models.StandardPartDTO, error) {
-	panic(fmt.Errorf("not implemented: UpdateStandardPart - updateStandardPart"))
+	standardPart := models.NewStandardPart(
+		updateStandardPartInput.Code,
+		updateStandardPartInput.Name,
+		updateStandardPartInput.Number,
+	)
+	standardPart.Id = updateStandardPartInput.ID
+	return r.StandardPartService.UpdateStandardPart(standardPart)
 }
 
 // StandardParts is the resolver for the standardParts field.

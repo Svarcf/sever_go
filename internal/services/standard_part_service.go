@@ -21,6 +21,14 @@ func (s *StandardPartService) CreateStandardPart(standardPart *models.StandardPa
 	return standardPart.ToDTO(), nil
 }
 
+func (s *StandardPartService) UpdateStandardPart(standardPart *models.StandardPart) (*models.StandardPartDTO, error) {
+	err := s.DB.Save(standardPart).Error
+	if err != nil {
+		return nil, err
+	}
+	return standardPart.ToDTO(), nil
+}
+
 func (s *StandardPartService) GetStandardPartById(id uint) (*models.StandardPartDTO, error) {
 	var standardPart *models.StandardPart
 	err := s.DB.First(&standardPart, id).Error

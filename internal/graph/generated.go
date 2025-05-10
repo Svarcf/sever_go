@@ -8737,7 +8737,7 @@ func (ec *executionContext) unmarshalInputUpdateStandardPartInput(ctx context.Co
 		switch k {
 		case "id":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
+			data, err := ec.unmarshalNID2uint(ctx, v)
 			if err != nil {
 				return it, err
 			}

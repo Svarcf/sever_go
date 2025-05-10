@@ -21,7 +21,7 @@ type StandardPart {
 }
 
 input UpdateStandardPartInput {
-    id: Int!
+    id: ID!
     code: String!
     name: String!
     number: Int!
