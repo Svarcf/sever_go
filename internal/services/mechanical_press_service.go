@@ -21,6 +21,14 @@ func (s *MechanicalPressService) CreateMechanicalPress(mechanicalPress *models.M
 	return mechanicalPress.ToDTO(), nil
 }
 
+func (s *MechanicalPressService) UpdateMechanicalPress(mechanicalPress *models.MechanicalPress) (*models.MechanicalPressDTO, error) {
+	err := s.DB.Save(mechanicalPress).Error
+	if err != nil {
+		return nil, err
+	}
+	return mechanicalPress.ToDTO(), nil
+}
+
 func (s *MechanicalPressService) GetMechanicalPressById(id uint) (*models.MechanicalPressDTO, error) {
 	var mechanicalPress *models.MechanicalPress
 	err := s.DB.First(&mechanicalPress, id).Error

@@ -21,6 +21,7 @@ func (r *mutationResolver) CreateStandardPart(ctx context.Context, createStandar
 	return r.StandardPartService.CreateStandardPart(standardPart)
 }
 
+// UpdateStandardPart is the resolver for the updateStandardPart field.
 func (r *mutationResolver) UpdateStandardPart(ctx context.Context, updateStandardPartInput *model.UpdateStandardPartInput) (*models.StandardPartDTO, error) {
 	standardPart := models.NewStandardPart(
 		updateStandardPartInput.Code,

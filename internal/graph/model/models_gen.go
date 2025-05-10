@@ -89,7 +89,7 @@ type UpdateFileInput struct {
 }
 
 type UpdateMechanicalPressInput struct {
-	ID   int    `json:"id"`
+	ID   uint   `json:"id"`
 	Code string `json:"code"`
 	Name string `json:"name"`
 }

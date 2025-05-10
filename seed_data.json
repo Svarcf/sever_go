@@ -15,9 +15,9 @@
     {"name": "Specification Sheet", "location": "/specs/spec_1.pdf"}
   ],
   "mechanical_presses": [
-    {"name": "Press 1", "code": "MP-001", "number": 101},
-    {"name": "Press 2", "code": "MP-002", "number": 102},
-    {"name": "Press 3", "code": "MP-003", "number": 103}
+    {"name": "Press 1", "code": "MP-001" },
+    {"name": "Press 2", "code": "MP-002" },
+    {"name": "Press 3", "code": "MP-003" }
   ],
   "raw_materials": [
     {"name": "Steel", "code": "RM-001", "number": 500},

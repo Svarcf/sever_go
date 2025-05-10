@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/Svarcf/sever_go/internal/graph/model"
 	"github.com/Svarcf/sever_go/internal/models"
@@ -17,14 +16,18 @@ func (r *mutationResolver) CreateMechanicalPress(ctx context.Context, createMech
 	mechanicalPress := models.NewMechanicalPress(
 		createMechanicalPressInput.Code,
 		createMechanicalPressInput.Name,
-		1,
 	)
 	return r.MechanicalPressService.CreateMechanicalPress(mechanicalPress)
 }
 
 // UpdateMechanicalPress is the resolver for the updateMechanicalPress field.
 func (r *mutationResolver) UpdateMechanicalPress(ctx context.Context, updateMechanicalPressInput *model.UpdateMechanicalPressInput) (*models.MechanicalPressDTO, error) {
-	panic(fmt.Errorf("not implemented: UpdateMechanicalPress - updateMechanicalPress"))
+	mechanicalPress := models.NewMechanicalPress(
+		updateMechanicalPressInput.Code,
+		updateMechanicalPressInput.Name,
+	)
+	mechanicalPress.Id = updateMechanicalPressInput.ID
+	return r.MechanicalPressService.UpdateMechanicalPress(mechanicalPress)
 }
 
 // MechanicalPresses is the resolver for the mechanicalPresses field.
